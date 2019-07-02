@@ -1,7 +1,8 @@
 # l1l2inv2
 
 ## DESCRIPTION
-This program performs magnetic inversion with L1-L2 norm combined regularization.
+This program performs magnetic inversion with L1-L2 norm combined regularization using CDA,
+via coordinate descent algorithm.
 
 minimize (1/2) * || y - X * beta ||^2 + (1/2) * lambda2 * ||beta||^2+lambda1 * |beta|,
 
@@ -64,7 +65,7 @@ because of the overhead of the accessing to the storage to read the matrix X.
 
 ## Output
 
-calc.sh, and calc_xmat.sh outputs the models for a decreasing sequence lambda
+calc.sh, and calc_xmat.sh outputs the models for a decreasing sequence of lambda
 to an ascii file beta_path.data.
 To extract a model of specific number of iteration, use a support program bin/extract.
 To see the usage of this program, please run
