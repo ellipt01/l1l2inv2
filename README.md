@@ -3,6 +3,18 @@
 ## DESCRIPTION
 This program performs magnetic inversion with L1-L2 norm combined regularization.
 
+minimize (1/2) || y - X * beta ||^2 + lambda1 * ||beta||^2+lambda2 * |beta|,
+
+where
+
+lambda1, lambda2: regurarization parameter for L1 and L2 norm regularization.
+
+beta: subsurfae magnetic model
+
+y: observed data vector
+
+X: transfer matrix
+
 ## INSTLLATION
 This program uses the following libraries
  * BLAS
