@@ -3,7 +3,7 @@
 ## DESCRIPTION
 This program performs magnetic inversion with L1-L2 norm combined regularization.
 
-minimize (1/2) || y - X * beta ||^2 + lambda2 * ||beta||^2+lambda1 * |beta|,
+minimize (1/2) * || y - X * beta ||^2 + (1/2) * lambda2 * ||beta||^2+lambda1 * |beta|,
 
 where
 
