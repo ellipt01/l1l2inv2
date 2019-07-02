@@ -6,8 +6,8 @@ This program performs magnetic inversion with L1-L2 norm combined regularization
 ## INSTLLATION
 This program uses the following libraries
  * BLAS
- * openmp
  * GSL(Gnu Scientific Libraries)
+ * openmp
 
 Before install this program, please install the above libraries.
 
