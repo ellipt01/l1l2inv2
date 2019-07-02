@@ -1,0 +1,17 @@
+# Inclination, Declination
+#    Inc     Dec (degree)
+    50.0    -7.0
+
+# magnetized block #1
+#     X0        Y0       Z0       L       W       H(km)   Mgz
+  -0.250     0.010   -0.090   0.020   0.020   0.020      20.0
+
+# magnetized block #2
+#     X0        Y0       Z0       L       W       H(km)   Mgz
+   0.250     0.010   -0.090   0.020   0.020   0.020      20.0
+ 
+# magnetized block #3
+#     X0        Y0       Z0       L       W       H(km)   Mgz
+   0.010     0.010   -0.250   0.020   0.020   0.020      20.0
+  
+
