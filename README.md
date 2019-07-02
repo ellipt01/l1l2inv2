@@ -30,7 +30,7 @@ $ make install DESTDIR=\<root\>
 
 # RUN
 
-After finishing installation correctly, a script calc.sh may be exists in \<root\>/bin .
+After finishing installation correctly, a script calc.sh should be exists in \<root\>/bin .
 To perform inversion, run this script.
 To see usage of this script, run
 
@@ -42,9 +42,14 @@ $ \<root\>/bin/calc.sh -h
 
 # For quite large probrem
 
-If size of the matrix X is too large, memory allocation will fail and calc.sh will terminate.
+If size of the matrix X is too large, memory allocation will fail and calc.sh will terminate abnormally.
 This is because calc.sh stores matrix X in memory at one time.
-If you treat a large X, that is, when you use very fine grid and/or large observation data, the script calc_xmat.sh is available.
-This script does not store X in memory, but in files, and read these files when needed.
-So, calc_xmat.sh uses only small memories, but uses large space of storage (such as HDD),
-and performance of inversion is reduced because of the overhead of accessing the storage to read the matrix X.
+If you treat a large X, that is, when you use very fine grid and/or large observation data,
+the script calc_xmat.sh is available.
+This script does not store X in memory, but in files, and read them when needed.
+So, calc_xmat.sh uses only small memories, but uses large space of storage.
+Before to run calc_xmat.sh, please confirm you have enought free space in your HDD.
+
+## notice
+By using calc_xmat.sh, the performance of the inversion is reduced
+because of the overhead of the accessing to the storage to read the matrix X.
