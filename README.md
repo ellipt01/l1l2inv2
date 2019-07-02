@@ -46,13 +46,9 @@ After finishing installation correctly, a script calc.sh should be exists in \<r
 To perform inversion, run this script.
 To see usage of this script, run
 
-$ \<root\>/bin/calc.sh
-
-or
-
 $ \<root\>/bin/calc.sh -h
 
-# For quite large probrem
+## For quite large probrem
 
 If size of the matrix X is too large, memory allocation will fail and calc.sh will terminate abnormally.
 This is because calc.sh stores matrix X in memory at one time.
@@ -62,6 +58,15 @@ This script does not store X in memory, but in files, and read them when needed.
 So, calc_xmat.sh uses only small memories, but uses large space of storage.
 Before to run calc_xmat.sh, please confirm you have enought free space in your HDD.
 
-## notice
+### notice
 By using calc_xmat.sh, the performance of the inversion is reduced
 because of the overhead of the accessing to the storage to read the matrix X.
+
+## Output
+
+calc.sh, and calc_xmat.sh outputs the models for a decreasing sequence lambda
+to an ascii file beta_path.data.
+To extract a model of specific number of iteration, use a support program bin/extract.
+To see the usage of this program, please run
+
+$ \<root\>/bin/extract -h
