@@ -36,12 +36,12 @@ After that, open Makefile on the root dir, and modify the following entries acco
  * AR: archiver
 
 After modifying Makefile, run make, and make install.
-If you want to install this programs in a specific directory, please run
+If you want to install this programs in a specific directory, run
 
 $ make install DESTDIR=\<root\>
 
 
-# RUN
+# INVERSION
 
 After finishing installation correctly, a script calc.sh should be exists in \<root\>/bin .
 To perform inversion, run this script.
