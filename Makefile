@@ -91,7 +91,7 @@ install:
 				$(INSTALL) -m 755 tools/$$i $(DESTDIR)/ ; \
 			done
 			@ for i in $(DEMO) ; do \
-				$(INSTALL) -m 755 demo/src/$$i $(DESTDIR)/ ; \
+				$(INSTALL) -m 755 demo/src/$$i demo/$(DESTDIR)/ ; \
 			done
 			@ for i in $(SUBDIRS) ; do\
 				$(MAKE) install -C $$i ; \
@@ -120,7 +120,7 @@ clean:		clean-objs
 			done
 			@ for i in $(DEMO) ; do \
 				$(RM) demo/src/$$i ; \
-				$(RM) $(DESTDIR)/$$i ; \
+				$(RM) demo/$(DESTDIR)/$$i ; \
 			done
 			@ for i in $(SUBDIRS) ; do \
 				echo $(MAKE) clean -C $$i ; \

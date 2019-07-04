@@ -1,0 +1,14 @@
+# declination and inclination of external geomagnetic field
+# double exf_dec, exf_inc
+1. inclination, declination:	50., -7.
+
+# grid setting
+# int ngrd[3]
+2. num of grids(nx, ny, nz):	50, 50, 25
+
+# area ofsubsurface space
+# double xgrd[2], ygrd[2], zgrd[2]
+3. x range:	 -0.5,  0.5
+4. y range:	 -0.5,  0.5
+5. z range:	  0.0, -0.5
+
