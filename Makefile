@@ -1,12 +1,12 @@
 ############################################################
 # Please edit following lines according to your system.
 # BLAS library
-BLAS		= -lblas
-
+BLAS_LIB	= -lblas
+GSL_LIB		= -lgsl -lgslcblas
 OPENMP_FLG	= -fopenmp
 
 # C compiler
-CC			= gcc
+CC		= gcc
 # make
 MAKE		= make
 # install
@@ -21,7 +21,7 @@ DESTDIR		= ./bin
 DESTLIBDIR	= ./lib
 
 LOCALLIBS	= -L./lib -ll1l2inv -lcdescent -lmgcal
-LIBS		= -lm -lgsl -lgslcblas $(OPENMP_FLG)
+LIBS		= $(BLAS_LIB) $(GSL_LIB) -lm $(OPENMP_FLG)
 CFLAGS		= -O3
 CPPFLAGS	= -I./include -I./mgcal/include -I./cdescent/include
 
@@ -37,7 +37,7 @@ CROSS_OBJS	= tools/cross_sect.o
 MAKEIN_OBJS	= demo/src/makeinput.o
 
 OBJS		= $(LIBSRC_OBJS) $(L1L2INV_OBJS) $(LCV_OBJS) $(LCVINTP_OBJS) $(OPTLAM_OBJS)\
-			  $(RECOV_OBJS) $(EXTR_OBJS) $(CROSS_OBJS) $(MAKEIN_OBJS)
+		  $(RECOV_OBJS) $(EXTR_OBJS) $(CROSS_OBJS) $(MAKEIN_OBJS)
 
 SUBDIRS		= mgcal cdescent scripts xmat
 
@@ -45,34 +45,34 @@ PROGRAMS	= l1l2inv lcurve_interp optimal_lambda
 TOOLS		= recover extract cross_sect
 DEMO		= makeinput
 
-all	:		libl1l2inv $(SUBDIRS) $(PROGRAMS) $(TOOLS) $(DEMO)
+all	:	libl1l2inv $(SUBDIRS) $(PROGRAMS) $(TOOLS) $(DEMO)
 
 libl1l2inv:	$(LIBSRC_OBJS)
 			$(AR) r $(DESTLIBDIR)/$@.a $(LIBSRC_OBJS)
 
 # PROGRAMS
 l1l2inv:	$(L1L2INV_OBJS) libl1l2inv
-			$(CC) $(CFLAGS) -o src/$@ $(L1L2INV_OBJS) $(CPPFLAGS) $(LOCALLIBS) $(BLAS) $(LIBS)
+			$(CC) $(CFLAGS) -o src/$@ $(L1L2INV_OBJS) $(CPPFLAGS) $(LOCALLIBS) $(LIBS)
 
 lcurve_interp:	$(LCVINTP_OBJS)
-			$(CC) $(CFLAGS) -o src/$@ $(LCVINTP_OBJS) $(CPPFLAGS) $(LOCALLIBS) $(BLAS) $(LIBS)
+			$(CC) $(CFLAGS) -o src/$@ $(LCVINTP_OBJS) $(CPPFLAGS) $(LOCALLIBS) $(LIBS)
 
 optimal_lambda:	$(OPTLAM_OBJS)
-			$(CC) $(CFLAGS) -o src/$@ $(OPTLAM_OBJS) $(CPPFLAGS) $(LOCALLIBS) $(BLAS) $(LIBS)
+			$(CC) $(CFLAGS) -o src/$@ $(OPTLAM_OBJS) $(CPPFLAGS) $(LOCALLIBS) $(LIBS)
 
 # TOOLS
 recover:	$(RECOV_OBJS)
-			$(CC) $(CFLAGS) -o tools/$@ $(RECOV_OBJS) $(CPPFLAGS) $(LOCALLIBS) $(BLAS) $(LIBS)
+			$(CC) $(CFLAGS) -o tools/$@ $(RECOV_OBJS) $(CPPFLAGS) $(LOCALLIBS) $(LIBS)
 
 extract:	$(EXTR_OBJS)
-			$(CC) $(CFLAGS) -o tools/$@ $(EXTR_OBJS) $(CPPFLAGS) $(LOCALLIBS) $(BLAS) $(LIBS)
+			$(CC) $(CFLAGS) -o tools/$@ $(EXTR_OBJS) $(CPPFLAGS) $(LOCALLIBS) $(LIBS)
 
 cross_sect:	$(CROSS_OBJS)
-			$(CC) $(CFLAGS) -o tools/$@ $(CROSS_OBJS) $(CPPFLAGS) $(LOCALLIBS) $(BLAS) $(LIBS)
+			$(CC) $(CFLAGS) -o tools/$@ $(CROSS_OBJS) $(CPPFLAGS) $(LOCALLIBS) $(LIBS)
 
 # DEMO
 makeinput:	$(MAKEIN_OBJS)
-			$(CC) $(CFLAGS) -o demo/src/$@ $(MAKEIN_OBJS) $(CPPFLAGS) $(LOCALLIBS) $(BLAS) $(LIBS)
+			$(CC) $(CFLAGS) -o demo/src/$@ $(MAKEIN_OBJS) $(CPPFLAGS) $(LOCALLIBS) $(LIBS)
 
 
 $(SUBDIRS):	FORCE
