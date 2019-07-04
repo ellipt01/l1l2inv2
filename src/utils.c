@@ -146,8 +146,7 @@ read_input (const int type, const char *ifn, const char *tfn)
 		fclose (fp);
 	}
 
-//	f = (ngrd[0] > 1) ? total_force_dipole : total_force_dipole_yz;
-	f = (ngrd[0] > 1) ? total_force_prism : total_force_prism_yz;
+	f = total_force_prism_bh;
 	func = mgcal_func_new (f, NULL);
 	eq = create_simeq (type, exf_inc, exf_dec, array, g, func);
 

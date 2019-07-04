@@ -409,7 +409,7 @@ z_component_dipole (const vector3d *obs, const source *src, void *data)
 }
 
 double
-total_force_dipole_0 (const vector3d *obs, const source *src, void *data)
+total_force_dipole (const vector3d *obs, const source *src, void *data)
 {
 	return component_dipole (obs, src, MGCAL_TOTAL_FORCE);
 }
@@ -443,7 +443,7 @@ z_component_prism (const vector3d *obs, const source *src, void *data)
 }
 
 double
-total_force_prism_0 (const vector3d *obs, const source *src, void *data)
+total_force_prism (const vector3d *obs, const source *src, void *data)
 {
 	return component_prism (obs, src, MGCAL_TOTAL_FORCE);
 }

@@ -7,12 +7,12 @@ INSTALL		= install
 OPENMP_FLG	= -fopenmp
 
 DESTDIR		= ../lib
-LIBS		= -lm -lgsl -lgslcblas $(OPENMP_FLG)
+LIBS		= -lm $(OPENMP_FLG)
 CFLAGS		= -O3
-CPPFLAGS	= -I./include `pkg-config gsl --cflags`
+CPPFLAGS	= -I./include
 
-LIBSRC_OBJS	= src/calc.o        src/grid.o  src/kernel.o  src/scattered.o  src/vector3d.o\
-			  src/data_array.o  src/io.o    src/mgcal.o   src/source.o src/private/util.o\
+LIBSRC_OBJS	= src/calc.o src/grid.o src/kernel.o src/scattered.o src/vector3d.o\
+			  src/data_array.o src/io.o src/mgcal.o src/source.o src/private/util.o\
 			  src/calc_bhattacharya.o
 
 all	:		libmgcal

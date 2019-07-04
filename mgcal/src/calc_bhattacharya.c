@@ -26,8 +26,8 @@ dipole_tf_kernel (
 )
 {
 	/*
-		Calculate magnetic total force due to a dipole
-		according to eq.(5) after Bhattacharya (1964).
+		Calculate magnetic total force anomaly due to a dipole,
+		according to eq.(5) of Bhattacharya (1964).
 
 		In his paper, the coordinate system is (Fig. 1)
 
@@ -94,8 +94,8 @@ prism_tf_kernel (
 )
 {
 	/*
-		Calculate magnetic total force due to a magnetized prism
-		according to eq.(10) after Bhattacharya (1964).
+		Calculate magnetic total force anomaly due to a magnetized prism,
+		according to eq.(10) of Bhattacharya (1964).
 
 		In his paper, the coordinate system is (Fig. 1)
 
@@ -165,8 +165,8 @@ dipole_tf (const vector3d *obs, const source *s)
 	vector3d	*exf;
 	source_item	*cur;
 
-	if (!obs) error_and_exit_mgcal ("dipole", "vector3d *obs is empty.", __FILE__, __LINE__);
-	if (!s) error_and_exit_mgcal ("dipole", "source *s is empty.", __FILE__, __LINE__);
+	if (!obs) error_and_exit_mgcal ("dipole_tf", "vector3d *obs is empty.", __FILE__, __LINE__);
+	if (!s) error_and_exit_mgcal ("dipole_tf", "source *s is empty.", __FILE__, __LINE__);
 
 	xobs = obs->x;
 	yobs = obs->y;
@@ -180,8 +180,8 @@ dipole_tf (const vector3d *obs, const source *s)
 		double	dx, dy, dz;
 		double	flag;
 
-		if (!cur->pos) error_and_exit_mgcal ("dipolem", "position of source item is empty.", __FILE__, __LINE__);
-		if (!cur->mgz) error_and_exit_mgcal ("dipole", "magnetization of source item is empty.", __FILE__, __LINE__);
+		if (!cur->pos) error_and_exit_mgcal ("dipole_tf", "position of source item is empty.", __FILE__, __LINE__);
+		if (!cur->mgz) error_and_exit_mgcal ("dipole_tf", "magnetization of source item is empty.", __FILE__, __LINE__);
 
 		xsrc = cur->pos->x;
 		ysrc = cur->pos->y;
@@ -206,8 +206,8 @@ prism_tf (const vector3d *obs, const source *s)
 	double		tmp[8];
 	source_item	*cur;
 
-	if (!obs) error_and_exit_mgcal ("prism", "vector3d *obs is empty.", __FILE__, __LINE__);
-	if (!s) error_and_exit_mgcal ("prism", "source *s is empty.", __FILE__, __LINE__);
+	if (!obs) error_and_exit_mgcal ("prism_tf", "vector3d *obs is empty.", __FILE__, __LINE__);
+	if (!s) error_and_exit_mgcal ("prism_tf", "source *s is empty.", __FILE__, __LINE__);
 
 	xobs = obs->x;
 	yobs = obs->y;
@@ -221,9 +221,9 @@ prism_tf (const vector3d *obs, const source *s)
 		double	dx, dy, dz;
 		double	flag;
 
-		if (!cur->pos) error_and_exit_mgcal ("prism", "position of source item is empty.", __FILE__, __LINE__);
-		if (!cur->dim) error_and_exit_mgcal ("prism", "dimension of source item is empty.", __FILE__, __LINE__);
-		if (!cur->mgz) error_and_exit_mgcal ("prism", "magnetization of source item is empty.", __FILE__, __LINE__);
+		if (!cur->pos) error_and_exit_mgcal ("prism_tf", "position of source item is empty.", __FILE__, __LINE__);
+		if (!cur->dim) error_and_exit_mgcal ("prism_tf", "dimension of source item is empty.", __FILE__, __LINE__);
+		if (!cur->mgz) error_and_exit_mgcal ("prism_tf", "magnetization of source item is empty.", __FILE__, __LINE__);
 
 		dx = cur->dim->x;
 		dy = cur->dim->y;
@@ -271,13 +271,13 @@ prism_tf (const vector3d *obs, const source *s)
 }
 
 double
-total_force_dipole (const vector3d *obs, const source *src, void *data)
+total_force_dipole_bh (const vector3d *obs, const source *src, void *data)
 {
 	return dipole_tf (obs, src);
 }
 
 double
-total_force_prism (const vector3d *obs, const source *src, void *data)
+total_force_prism_bh (const vector3d *obs, const source *src, void *data)
 {
 	return prism_tf (obs, src);
 }
