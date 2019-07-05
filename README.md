@@ -24,7 +24,11 @@ This program uses the following libraries
 
 Before install this program, please install the above libraries.
 
-After that, open Makefile on the root dir, and modify the following entries according to your system:
+After that, copy Makefile.template as Makefile on the root dir:
+
+$ cp Makefile.template Makefile
+
+and modify the following entries according to your system:
 
  * BLAS_LIB: BLAS library, library-path and include dir
  * GSL_LIB:  GSL library, library-path and include dir
