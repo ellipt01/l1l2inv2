@@ -27,7 +27,7 @@ dipole_tf_kernel (
 {
 	/*
 		Calculate magnetic total force anomaly due to a dipole,
-		according to eq.(5) of Bhattacharya (1964).
+		according to eq.(5) of Bhattacharyya (1964).
 
 		In his paper, the coordinate system is (Fig. 1)
 
@@ -95,7 +95,7 @@ prism_tf_kernel (
 {
 	/*
 		Calculate magnetic total force anomaly due to a magnetized prism,
-		according to eq.(10) of Bhattacharya (1964).
+		according to eq.(10) of Bhattacharyya (1964).
 
 		In his paper, the coordinate system is (Fig. 1)
 
