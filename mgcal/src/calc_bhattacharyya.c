@@ -142,8 +142,6 @@ prism_tf_kernel (
 	double	a13 = bL * an + bN * al;
 	double	a23 = bM * an + bN * am;
 
-	double	ct = a1 + a2 + a3;
-
 	double	ret = (
 		  0.5 * a23 * (log (r - x) - log (r + x))
 		+ 0.5 * a13 * (log (r - y) - log (r + y))
@@ -177,8 +175,6 @@ dipole_tf (const vector3d *obs, const source *s)
 	f = 0.;
 	cur = s->begin;
 	while (cur) {
-		double	dx, dy, dz;
-		double	flag;
 
 		if (!cur->pos) error_and_exit_mgcal ("dipole_tf", "position of source item is empty.", __FILE__, __LINE__);
 		if (!cur->mgz) error_and_exit_mgcal ("dipole_tf", "magnetization of source item is empty.", __FILE__, __LINE__);

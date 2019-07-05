@@ -13,7 +13,7 @@ CPPFLAGS	= -I./include
 
 LIBSRC_OBJS	= src/calc.o src/grid.o src/kernel.o src/scattered.o src/vector3d.o\
 			  src/data_array.o src/io.o src/mgcal.o src/source.o src/private/util.o\
-			  src/calc_bhattacharya.o
+			  src/calc_bhattacharyya.o
 
 all	:		libmgcal
 

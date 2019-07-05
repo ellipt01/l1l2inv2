@@ -146,7 +146,7 @@ read_input (const int type, const char *ifn, const char *tfn)
 		fclose (fp);
 	}
 
-	f = total_force_prism_bh;
+	f = total_force_prism;
 	func = mgcal_func_new (f, NULL);
 	eq = create_simeq (type, exf_inc, exf_dec, array, g, func);
 

@@ -152,7 +152,7 @@ main (int argc, char **argv)
 	fclose (fpi);
 	fprintf_sources (stderr, s);
 
-	f = total_force_prism_bh;
+	f = total_force_prism;
 
 	create_input_data (fpo, g, s, f);
 	fclose (fpo);
