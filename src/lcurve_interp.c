@@ -399,6 +399,23 @@ eval_curvature (const gsl_vector *dx, const gsl_vector *dy, const gsl_vector *dd
 	return cv;
 }
 
+typedef struct {
+	double	l;
+	double	cv;
+	double	y;
+} cv_data;
+
+static int
+compare_cv (const void *_a, const void *_b)
+{
+	cv_data	*a = (cv_data *) _a;
+	cv_data	*b = (cv_data *) _b;
+
+	if (a->l < b->l) return -1;
+	if (a->l > b->l) return 1;
+	return 0;
+}
+
 bool
 bspline_curvature (gsl_vector *l, gsl_vector *x, gsl_vector *y)
 {
@@ -456,11 +473,33 @@ bspline_curvature (gsl_vector *l, gsl_vector *x, gsl_vector *y)
 	gsl_vector_free (ddx);
 	gsl_vector_free (ddy);
 
+	// sort results
 	fp = fopen ("cv.data", "w");
+	if (fp) {
+		int		i;
+		int		n = cv->size;
+		cv_data	cdata[n];
+
+		for (i = 0; i < n; i++) {
+			cdata[i].l = pow (10., gsl_vector_get (l, i + 2));
+			cdata[i].cv = gsl_vector_get (cv, i);
+			cdata[i].y = pow (10, gsl_vector_get (y, i + 2));
+		}
+		qsort ((void *) &cdata, n, sizeof (cv_data), compare_cv);
+
+		// do not output first and last elements of cv
+		// because on the edge of the range,
+		// estimation of curvature is likely to unstable.
+		for (i = 1; i < n - 1; i++) fprintf (fp, "%.4e\t%.4e\t%.4e\n", cdata[i].l, cdata[i].cv, cdata[i].y);
+
+	}
+
+	/*
 	if (fp) {
 		fprintf_curvature (fp, l, cv, y);
 		fclose (fp);
 	}
+	*/
 	gsl_vector_free (cv);
 
 	return true;

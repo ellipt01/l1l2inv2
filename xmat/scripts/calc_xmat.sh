@@ -168,11 +168,6 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
-# eval curvature of L-curve (L2 rss v.s. $ALPHA*L1+(1-$ALPHA)*L2/2)
-#echo "$dir"/curvature -f regression_info.data -a $ALPHA
-#"$dir"/curvature -f regression_info.data -a $ALPHA > /dev/null 2>&1
-
-
 echo "$dir"/lcurve_interp -f regression_info.data -a $ALPHA -b $BETA
 "$dir"/lcurve_interp -f regression_info.data -a $ALPHA -b $BETA
 
@@ -180,10 +175,9 @@ echo "$dir"/lcurve_interp -f regression_info.data -a $ALPHA -b $BETA
 if [ -e splined.data ]; then
 	mv -f splined.data splined1.data
 fi
-n=`cat cv.data | gawk 'END{print NR}'`
-cat cv.data | gawk 'NR>1&&NR<'$((n-1))'{print $0}' | tac >| curvature.data
-rm -f cv.data
 
+rm -f curvature.data
+mv cv.data curvature.data
 
 # find optimal lambda
 res=`cat curvature.data | gawk 'BEGIN{max=0;l=0;j=0}\
