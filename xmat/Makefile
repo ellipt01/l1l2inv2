@@ -1,22 +1,5 @@
-############################################################
-# Please edit following lines according to your system.
-# BLAS library
-BLAS_LIB	= `pkg-config mkl --libs --cflags`
-GSL_LIB		= `pkg-config gsl --libs --cflags`
-OPENMP_FLG	= -fopenmp
 
-# C compiler
-CC			= gcc
-############################################################
-
-# make
-MAKE		= make
-# install
-INSTALL		= install
-# archiver
-AR			= ar
-# remove
-RM			= rm -f
+include ../config
 
 DESTDIR		= ../bin
 DESTLIBDIR	= ./lib
@@ -58,7 +41,7 @@ $(SUBDIRS):	FORCE
 FORCE:
 
 .c.o:
-			$(CC) $(CFLAGS) -o $*.o -c $(CPPFLAGS) $< $(OPENMP_FLG)
+			$(CC) $(CFLAGS) -o $*.o -c $(CPPFLAGS) $<
 
 install:
 			@ for i in $(PROGRAMS) ; do \

@@ -1,4 +1,6 @@
-INSTALL	= install
+
+include ../config
+
 DESTDIR	= ../bin
 
 SCRIPTS	= calc.sh

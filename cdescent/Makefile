@@ -1,5 +1,5 @@
-AR			= ar
-RM			= rm -f
+
+include ../config
 
 DESTDIR		= ../lib
 CFLAGS		= -O3
@@ -16,7 +16,7 @@ libcdescent:	$(LIBSRC_OBJS)
 			$(AR) r $(DESTDIR)/$@.a $(LIBSRC_OBJS)
 
 .c.o:
-			$(CC) $(CFLAGS) -o $*.o -c $(CPPFLAGS) $< $(OPENMP_FLG)
+			$(CC) $(CFLAGS) -o $*.o -c $(CPPFLAGS) $<
 
 install:
 

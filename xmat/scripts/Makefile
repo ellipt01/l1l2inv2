@@ -1,4 +1,5 @@
-INSTALL	= install
+include ../../config
+
 DESTDIR	= ../../bin
 
 SCRIPTS	= calc_xmat.sh

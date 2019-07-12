@@ -1,5 +1,7 @@
-AR			= ar
-RM			= rm -f
+
+include ../config
+
+OPENMP_FLG	= -fopenmp
 
 DESTDIR		= ../lib
 LIBS		= -lm $(OPENMP_FLG)
@@ -16,7 +18,7 @@ libmgcal:	$(LIBSRC_OBJS)
 			$(AR) r $(DESTDIR)/$@.a $(LIBSRC_OBJS)
 
 .c.o:
-			$(CC) $(CFLAGS) -o $*.o -c $(CPPFLAGS) $< $(OPENMP_FLG)
+			$(CC) $(CFLAGS) -o $*.o -c $(CPPFLAGS) $<
 
 install:
 

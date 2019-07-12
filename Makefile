@@ -1,22 +1,5 @@
-############################################################
-# Please edit following lines according to your system.
-# BLAS library
-BLAS_LIB	= -lblas
-GSL_LIB		= -lgsl -lgslcblas
-OPENMP_FLG	= -fopenmp
 
-# C compiler
-CC			= gcc
-############################################################
-
-# make
-MAKE		= make
-# install
-INSTALL		= install
-# archiver
-AR			= ar
-# remove
-RM			= rm -f
+include config
 
 DESTDIR		= ./bin
 DESTLIBDIR	= ./lib
@@ -82,7 +65,7 @@ $(SUBDIRS):	FORCE
 FORCE:
 
 .c.o:
-			$(CC) $(CFLAGS) -o $*.o -c $(CPPFLAGS) $< $(OPENMP_FLG)
+			$(CC) $(CFLAGS) -o $*.o -c $(CPPFLAGS) $<
 
 install:
 			@ for i in $(PROGRAMS) ; do \
@@ -92,7 +75,7 @@ install:
 				$(INSTALL) -m 755 tools/$$i $(DESTDIR)/ ; \
 			done
 			@ for i in $(DEMO) ; do \
-				$(INSTALL) -m 755 demo/src/$$i demo/$(DESTDIR)/ ; \
+				$(INSTALL) -m 755 demo/src/$$i demo/bin/ ; \
 			done
 			@ for i in $(SUBDIRS) ; do\
 				$(MAKE) install -C $$i ; \
