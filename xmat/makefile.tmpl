@@ -1,8 +1,8 @@
 ############################################################
 # Please edit following lines according to your system.
 # BLAS library
-BLAS_LIB	= `pkg-config mkl --libs --cflags`
-GSL_LIB		= `pkg-config gsl --libs --cflags`
+BLAS_LIB	= -lblas
+GSL_LIB		= -lgsl -lgslcblas
 OPENMP_FLG	= -fopenmp
 
 # C compiler

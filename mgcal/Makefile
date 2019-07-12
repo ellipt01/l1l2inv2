@@ -1,10 +1,5 @@
-CC			= gcc
 AR			= ar
 RM			= rm -f
-MAKE		= make
-INSTALL		= install
-
-OPENMP_FLG	= -fopenmp
 
 DESTDIR		= ../lib
 LIBS		= -lm $(OPENMP_FLG)

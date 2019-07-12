@@ -1,7 +1,4 @@
-CC		= gcc
-RM		= rm -f
 INSTALL	= install
-
 DESTDIR	= ../../bin
 
 SCRIPTS	= calc_xmat.sh

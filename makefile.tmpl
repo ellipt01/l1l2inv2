@@ -6,7 +6,9 @@ GSL_LIB		= -lgsl -lgslcblas
 OPENMP_FLG	= -fopenmp
 
 # C compiler
-CC		= gcc
+CC			= gcc
+############################################################
+
 # make
 MAKE		= make
 # install
@@ -15,7 +17,6 @@ INSTALL		= install
 AR			= ar
 # remove
 RM			= rm -f
-############################################################
 
 DESTDIR		= ./bin
 DESTLIBDIR	= ./lib
@@ -76,7 +77,7 @@ makeinput:	$(MAKEIN_OBJS)
 
 
 $(SUBDIRS):	FORCE
-			$(MAKE) -C $@ CC=$(CC) BLAS_LIB=$(BLAS_LIB) GSL_LIB=$(GSL_LIB) OPENMP_FLG=$(OPENMP_FLG)
+			$(MAKE) -C $@
 
 FORCE:
 

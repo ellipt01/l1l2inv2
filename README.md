@@ -24,20 +24,18 @@ This program uses the following libraries
 
 Before install this program, please install the above libraries.
 
-After that, copy Makefile.template as Makefile on the root dir:
+After that, copy
 
-$ cp Makefile.template Makefile
+$ cp makefile.tmpl Makefile
+$ cp xmat/makefile.tmpl xmat/Makefile
 
-and modify the following entries according to your system:
+and modify the following entries of Makefile and xmat/Makefile
+according to your system:
 
  * BLAS_LIB: BLAS library, library-path and include dir
  * GSL_LIB:  GSL library, library-path and include dir
  * OPENMP_FLG: openMP flag
-
  * CC: C compiler
- * MAKE: make command
- * INSTALL: install command
- * AR: archiver
 
 After modifying Makefile, run make, and make install.
 If you want to install this programs in a specific directory, run
