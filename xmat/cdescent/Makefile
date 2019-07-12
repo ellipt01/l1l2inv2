@@ -1,7 +1,7 @@
 
 include ../../config
 
-DESTDIR		= ../lib
+DESTLIBDIR	= ../lib
 CFLAGS		= -O3
 CPPFLAGS	= -I./include
 
@@ -13,7 +13,7 @@ LIBSRC_OBJS	= src/cdescent.o src/linregmodel.o src/regression.o src/update.o\
 all	:		libcdescent_xmat
 
 libcdescent_xmat:	$(LIBSRC_OBJS)
-			$(AR) r $(DESTDIR)/$@.a $(LIBSRC_OBJS)
+			$(AR) r $(DESTLIBDIR)/$@.a $(LIBSRC_OBJS)
 
 .c.o:
 			$(CC) $(CFLAGS) -o $*.o -c $(CPPFLAGS) $<
@@ -27,5 +27,5 @@ clean-objs:
 			$(RM) *~
 
 clean:		clean-objs
-			$(RM) $(DESTDIR)/libcdescent_xmat.a
+			$(RM) $(DESTLIBDIR)/libcdescent_xmat.a
 

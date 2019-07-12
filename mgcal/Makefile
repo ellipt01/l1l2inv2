@@ -3,7 +3,7 @@ include ../config
 
 OPENMP_FLG	= -fopenmp
 
-DESTDIR		= ../lib
+DESTLIBDIR	= ../lib
 LIBS		= -lm $(OPENMP_FLG)
 CFLAGS		= -O3
 CPPFLAGS	= -I./include
@@ -15,7 +15,7 @@ LIBSRC_OBJS	= src/calc.o src/grid.o src/kernel.o src/scattered.o src/vector3d.o\
 all	:		libmgcal
 
 libmgcal:	$(LIBSRC_OBJS)
-			$(AR) r $(DESTDIR)/$@.a $(LIBSRC_OBJS)
+			$(AR) r $(DESTLIBDIR)/$@.a $(LIBSRC_OBJS)
 
 .c.o:
 			$(CC) $(CFLAGS) -o $*.o -c $(CPPFLAGS) $<
@@ -29,5 +29,5 @@ clean-objs:
 			$(RM) *~ */*~
 
 clean:		clean-objs
-			$(RM) $(DESTDIR)/libmgcal.a
+			$(RM) $(DESTLIBDIR)/libmgcal.a
 
