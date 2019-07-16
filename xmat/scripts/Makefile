@@ -1,4 +1,4 @@
-include ../../config
+include ../../make.config
 
 DESTDIR	= ../../bin
 

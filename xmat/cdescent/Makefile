@@ -1,5 +1,5 @@
 
-include ../../config
+include ../../make.config
 
 DESTLIBDIR	= ../lib
 CFLAGS		= -O3

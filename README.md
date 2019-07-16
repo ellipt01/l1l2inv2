@@ -1,6 +1,6 @@
 # l1l2inv2
 
-## DESCRIPTION
+# DESCRIPTION
 This program performs magnetic inversion with L1-L2 norm combined regularization using CDA,
 via coordinate descent algorithm.
 
@@ -16,28 +16,28 @@ y: observed data vector
 
 X: transfer matrix
 
-## INSTLLATION
-This program uses the following libraries
+# DEPENCENCIES
+This program uses the following external libraries:
  * BLAS
  * GSL(Gnu Scientific Libraries)
  * openMP
 
-Before install this program, please install the above libraries.
+Before make this program, please install the above libraries in your system.
 
-After that, copy
+# INSTALLATION
+Before the compilation, copy
 
-$ cp makefile.tmpl Makefile
-$ cp xmat/makefile.tmpl xmat/Makefile
+$ cp make.config.templ make.config
 
-and modify the following entries of Makefile and xmat/Makefile
+and modify the following entries in make.config file
 according to your system:
 
- * BLAS_LIB: BLAS library, library-path and include dir
- * GSL_LIB:  GSL library, library-path and include dir
- * OPENMP_FLG: openMP flag
- * CC: C compiler
+ * BLAS_LIB: BLAS library path and include dirs
+ * GSL_LIB:  GSL library path and include dirs
+ * OPENMP_FLG: openMP flag (e.g. -fopenmp etc.)
+ * CC: C compiler (gcc, icc, etc.)
 
-After modifying Makefile, run make, and make install.
+After modifying, run make, and make install.
 If you want to install this programs in a specific directory, run
 
 $ make install DESTDIR=\<root\>
@@ -51,7 +51,7 @@ To see usage of this script, run
 
 $ \<root\>/bin/calc.sh -h
 
-## For quite large probrem
+### For quite large probrem
 
 If size of the matrix X is too large, memory allocation will fail and calc.sh will terminate abnormally.
 This is because calc.sh stores matrix X in memory at one time.

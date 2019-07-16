@@ -1,5 +1,5 @@
 
-include ../config
+include ../make.config
 
 OPENMP_FLG	= -fopenmp
 
