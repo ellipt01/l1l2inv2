@@ -41,7 +41,7 @@ $(SUBDIRS):	FORCE
 FORCE:
 
 .c.o:
-			$(CC) $(CFLAGS) -o $*.o -c $(CPPFLAGS) $<
+			$(CC) $(CFLAGS) -o $*.o -c $(CPPFLAGS) $< $(OPENMP_FLG)
 
 install:
 			@ for i in $(PROGRAMS) ; do \

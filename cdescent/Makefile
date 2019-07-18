@@ -16,7 +16,7 @@ libcdescent:	$(LIBSRC_OBJS)
 			$(AR) r $(DESTLIBDIR)/$@.a $(LIBSRC_OBJS)
 
 .c.o:
-			$(CC) $(CFLAGS) -o $*.o -c $(CPPFLAGS) $<
+			$(CC) $(CFLAGS) -o $*.o -c $(CPPFLAGS) $< $(OPENMP_FLG)
 
 install:
 
