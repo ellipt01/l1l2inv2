@@ -57,7 +57,7 @@ usage (char *toolname)
 	fprintf (stderr, "       -m [maximum iteration number: default=1000000]\n");
 	fprintf (stderr, "       -n [lower:upper bounds of solutions]\n");
 	fprintf (stderr, "       -s [parameter setting file: default=./settings]\n");
-	fprintf (stderr, "       -x (use already exists xmat files, default=false)\n");
+	fprintf (stderr, "       -c (use stochastic CDA: default is not use)\n");
 	fprintf (stderr, "       -v (verbose mode)\n");
 	fprintf (stderr, "       -x (use already exists xmat files, default=false)\n");
 	fprintf (stderr, "       -h (show this message)\n\n");
