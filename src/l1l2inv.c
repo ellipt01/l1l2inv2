@@ -45,8 +45,8 @@ l1l2inv_constraint_func (cdescent *cd, const int j, const double etaj, double *v
 bool
 l1l2inv (simeq *eq, char *path_fn, char *info_fn)
 {
-	linregmodel			*lreg;
-	cdescent			*cd;
+	linregmodel	*lreg;
+	cdescent	*cd;
 
 	if (verbose) fprintf (stderr, "preparing linregmodel object... ");
 	lreg = linregmodel_new (eq->y, eq->x, eq->d, DO_NORMALIZING_X);
@@ -87,6 +87,7 @@ l1l2inv (simeq *eq, char *path_fn, char *info_fn)
 	if (cd->use_intercept) fprintf (stderr, "intercept = %.4e\n", cd->b0);
 
 	cdescent_free (cd);
+	linregmodel_free (lreg);
 
 	return true;
 }

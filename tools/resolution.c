@@ -52,6 +52,7 @@ usage (char *toolname)
 	fprintf (stderr, "       -m [maximum iteration number: default=1000000]\n");
 	fprintf (stderr, "       -n [lower:upper bounds of solutions]\n");
 	fprintf (stderr, "       -s [parameter setting file: default=./settings]\n");
+	fprintf (stderr, "       -c (use stochastic CDA: default is not use)\n");
 	fprintf (stderr, "       -v (verbose mode)\n");
 	fprintf (stderr, "       -x (use already exists xmat files, default=false)\n");
 	fprintf (stderr, "       -h (show this message)\n\n");
@@ -175,9 +176,10 @@ read_input_params (int argc, char **argv)
 bool
 resolution (void)
 {
-	int					i, j, k;
-	int					m, n;
-	simeq				*eq;
+	int			i, j, k;
+	int			m, n;
+	simeq		*eq;
+	mm_dense	*x;
 
 	if (verbose) fprintf (stderr, "preparing simeq object... ");
 	if ((eq = read_input (type, ifn, tfn)) == NULL) return false;
@@ -186,27 +188,17 @@ resolution (void)
 	m = eq->x->m;
 	n = eq->x->n;
 
+	x = mm_real_new (MM_REAL_DENSE, MM_REAL_GENERAL, m, 1, m);
+
 	for (i = 0; i < ngrd[0]; i += incx) {
 
 		for (j = 0; j < ngrd[1]; j += incy) {
 
 			for (k = 0; k < ngrd[2]; k += incz) {
 				int			p, q, r;
-				mm_dense	*d = mm_real_new (MM_REAL_DENSE, MM_REAL_GENERAL, m, 1, m);
-
-				data_array	*data;
 
 				char		path_fn[80];
 				char		info_fn[80];
-				FILE		*fp;
-
-				fp = fopen ("input.data", "r");
-				if (!fp) {
-					fprintf (stderr, "ERROR: cannot open file input.data");
-					return false;
-				}
-				data = fread_data_array (fp);
-				fclose (fp);
 
 				// set output file name
 				{
@@ -216,8 +208,8 @@ resolution (void)
 					iy0 = j + (int) ((double) ly / 2.);
 					iz0 = k + (int) ((double) lz / 2.);
 
-					sprintf (path_fn, "beta_path%03d%03d%03d.res", ix0 , iy0, iz0);
-					sprintf (info_fn, "regression_info%03d%03d%03d.res", ix0 , iy0, iz0);
+					sprintf (path_fn, "beta_path%03d%03d%03d.data", ix0 , iy0, iz0);
+					sprintf (info_fn, "regression_info%03d%03d%03d.data", ix0 , iy0, iz0);
 				}
 
 				// read X of columns in ranges of
@@ -234,12 +226,11 @@ resolution (void)
 							int		one = 1;
 							int		iz = k + r;
 							int		l = ix + iy * ngrd[0] + iz * ngrd[0] * ngrd[1];
-							dcopy_ (&m, eq->x->data + l, &one, d->data, &one);
-							mm_real_axjpy (1., d, 0, eq->y);
+							dcopy_ (&m, eq->x->data + l, &one, x->data, &one);
+							mm_real_axjpy (1., x, 0, eq->y);
 						}
 					}
 				}
-				mm_real_free (d);
 
 				l1l2inv (eq, path_fn, info_fn);
 
@@ -247,6 +238,7 @@ resolution (void)
 		}
 	}
 
+	mm_real_free (x);
 	simeq_free (eq);
 
 	return true;

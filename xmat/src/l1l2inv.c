@@ -97,7 +97,7 @@ l1l2inv (simeq *eq, char *path_fn, char *info_fn)
 	if (cd->use_intercept) fprintf (stderr, "intercept = %.4e\n", cd->b0);
 
 	cdescent_free (cd);
-	simeq_free (eq);
+	linregmodel_free (lreg);
 
 	return true;
 }

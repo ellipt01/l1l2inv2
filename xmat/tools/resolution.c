@@ -213,19 +213,9 @@ resolution (void)
 
 			for (k = 0; k < ngrd[2]; k += incz) {
 				int			p, q, r;
-				data_array	*data;
 
 				char		path_fn[80];
 				char		info_fn[80];
-				FILE		*fp;
-
-				fp = fopen ("input.data", "r");
-				if (!fp) {
-					fprintf (stderr, "ERROR: cannot open file input.data");
-					return false;
-				}
-				data = fread_data_array (fp);
-				fclose (fp);
 
 				// set output file name
 				{
@@ -235,8 +225,8 @@ resolution (void)
 					iy0 = j + (int) ((double) ly / 2.);
 					iz0 = k + (int) ((double) lz / 2.);
 
-					sprintf (path_fn, "beta_path%03d%03d%03d.res", ix0 , iy0, iz0);
-					sprintf (info_fn, "regression_info%03d%03d%03d.res", ix0 , iy0, iz0);
+					sprintf (path_fn, "beta_path%03d%03d%03d.data", ix0 , iy0, iz0);
+					sprintf (info_fn, "regression_info%03d%03d%03d.data", ix0 , iy0, iz0);
 				}
 
 				// read X of columns in ranges of
