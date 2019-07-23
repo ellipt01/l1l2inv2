@@ -10,11 +10,12 @@
 #include "simeq.h"
 #include "utils.h"
 #include "settings.h"
+#include "defaults.h"
 
 extern char	*optarg;
 
 int			idx = -1;
-char		*ifn = NULL;
+char		*fn = NULL;
 char		*ter_fn = NULL;
 
 typedef enum {
@@ -52,8 +53,8 @@ read_input_params (int argc, char **argv)
 	while ((c = getopt (argc, argv, "f:i:o:t:s:h")) != EOF) {
 		switch (c) {
 			case 'f':
-				ifn = (char *) malloc (80 * sizeof (char));
-				strcpy (ifn, optarg);
+				fn = (char *) malloc (80 * sizeof (char));
+				strcpy (fn, optarg);
 				break;
 			case 'i':
 				idx = atoi (optarg);
@@ -76,7 +77,7 @@ read_input_params (int argc, char **argv)
 				break;
 		}
 	}
-	if (!ifn || idx < 0) return false;
+	if (!fn || idx < 0) return false;
 
 	return true;
 }
@@ -125,7 +126,7 @@ main (int argc, char **argv)
 	if (!read_input_params (argc, argv)) usage (argv[0]);
 	if (!read_settings (sfn)) return EXIT_FAILURE;
 
-	if ((beta = extract_beta (ifn, idx)) == NULL) {
+	if ((beta = extract_beta (fn, idx)) == NULL) {
 		fprintf (stderr, "ERROR: failed to read %d'th beta.\n", idx);
 		return EXIT_FAILURE;
 	}

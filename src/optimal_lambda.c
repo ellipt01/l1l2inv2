@@ -10,8 +10,10 @@
 #include "mgcal.h"
 #include "cdescent.h"
 
+#include "consts.h"
 #include "simeq.h"
 #include "utils.h"
+#include "settings.h"
 
 char	ifn[80];
 char	ofn[80] = "curvature_spl.data";

@@ -12,6 +12,7 @@
 #include "simeq.h"
 #include "utils.h"
 #include "settings.h"
+#include "defaults.h"
 
 char		fn[80];
 bool		terrain_file_specified = false;

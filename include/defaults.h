@@ -3,6 +3,7 @@
 
 char	ifn[80] = "input.data";
 char	tfn[80] = "terrain.data";
+char	sfn[80] = "settings";
 char	bfn[80];
 
 int		type = TYPE_L0;

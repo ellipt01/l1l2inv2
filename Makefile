@@ -9,24 +9,25 @@ LIBS		= $(BLAS_LIB) $(GSL_LIB) -lm $(OPENMP_FLG)
 CFLAGS		= -O3
 CPPFLAGS	= -I./include -I./mgcal/include -I./cdescent/include
 
-LIBSRC_OBJS	= src/simeq.o src/smooth.o src/utils.o src/settings.o
+LIBSRC_OBJS	= src/l1l2inv.o src/simeq.o src/smooth.o src/utils.o src/settings.o
 
-L1L2INV_OBJS= src/l1l2inv.o 
+L1L2INV_OBJS= src/main.o
 LCVINTP_OBJS= src/lcurve_interp.o
 OPTLAM_OBJS	= src/optimal_lambda.o
 
 RECOV_OBJS	= tools/recover.o
+RESOL_OBJS	= tools/resolution.o
 EXTR_OBJS	= tools/extract.o
 CROSS_OBJS	= tools/cross_sect.o
 MAKEIN_OBJS	= demo/src/makeinput.o
 
 OBJS		= $(LIBSRC_OBJS) $(L1L2INV_OBJS) $(LCV_OBJS) $(LCVINTP_OBJS) $(OPTLAM_OBJS)\
-		  $(RECOV_OBJS) $(EXTR_OBJS) $(CROSS_OBJS) $(MAKEIN_OBJS)
+			  $(RECOV_OBJS) $(RESOL_OBJS) $(EXTR_OBJS) $(CROSS_OBJS) $(MAKEIN_OBJS)
 
 SUBDIRS		= mgcal cdescent scripts xmat
 
 PROGRAMS	= l1l2inv lcurve_interp optimal_lambda
-TOOLS		= recover extract cross_sect
+TOOLS		= recover resolution extract cross_sect
 DEMO		= makeinput
 
 all	:	libl1l2inv $(SUBDIRS) $(PROGRAMS) $(TOOLS) $(DEMO)
@@ -47,6 +48,9 @@ optimal_lambda:	$(OPTLAM_OBJS)
 # TOOLS
 recover:	$(RECOV_OBJS)
 			$(CC) $(CFLAGS) -o tools/$@ $(RECOV_OBJS) $(CPPFLAGS) $(LOCALLIBS) $(LIBS)
+
+resolution:	$(RESOL_OBJS)
+			$(CC) $(CFLAGS) -o tools/$@ $(RESOL_OBJS) $(CPPFLAGS) $(LOCALLIBS) $(LIBS)
 
 extract:	$(EXTR_OBJS)
 			$(CC) $(CFLAGS) -o tools/$@ $(EXTR_OBJS) $(CPPFLAGS) $(LOCALLIBS) $(LIBS)

@@ -1590,17 +1590,29 @@ mm_real_fwrite (FILE *stream, const mm_real *x, const char *format)
 }
 
 /*** read xj from file ***/
-static mm_dense *
-read_xj (FILE **fp, int j, const int m)
+mm_dense *
+mm_real_read_xj (FILE *fp, int j, const int m)
 {
-	int			nh, k, l;
+	int			k, l;
 	int			ret;
 	mm_dense	*a = mm_real_new (MM_REAL_DENSE, MM_REAL_GENERAL, m, 1, m);
 
 	l = (int) (j / xfile_len);
 	k = j - l * xfile_len;
-	fseek (fp[l], k * m * sizeof (double), SEEK_SET);
-	ret = fread (a->data, sizeof (double), m, fp[l]);
+	fseek (fp, k * m * sizeof (double), SEEK_SET);
+	ret = fread (a->data, sizeof (double), m, fp);
+
+	return a;
+}
+
+static mm_dense *
+read_xj (FILE **fp, int j, const int m)
+{
+	int			l;
+	mm_dense	*a;
+
+	l = (int) (j / xfile_len);
+	a = mm_real_read_xj (fp[l], j, m);
 
 	return a;
 }
