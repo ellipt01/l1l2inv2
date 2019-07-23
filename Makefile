@@ -6,7 +6,6 @@ DESTLIBDIR	= ./lib
 
 LOCALLIBS	= -L./lib -ll1l2inv -lcdescent -lmgcal
 LIBS		= $(BLAS_LIB) $(GSL_LIB) -lm $(OPENMP_FLG)
-CFLAGS		= -O3
 CPPFLAGS	= -I./include -I./mgcal/include -I./cdescent/include
 
 LIBSRC_OBJS	= src/l1l2inv.o src/simeq.o src/smooth.o src/utils.o src/settings.o

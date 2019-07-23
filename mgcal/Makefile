@@ -5,7 +5,6 @@ OPENMP_FLG	= -fopenmp
 
 DESTLIBDIR	= ../lib
 LIBS		= -lm $(OPENMP_FLG)
-CFLAGS		= -O3
 CPPFLAGS	= -I./include
 
 LIBSRC_OBJS	= src/calc.o src/grid.o src/kernel.o src/scattered.o src/vector3d.o\

@@ -2,7 +2,6 @@
 include ../../make.config
 
 DESTLIBDIR	= ../lib
-CFLAGS		= -O3
 CPPFLAGS	= -I./include
 
 LIBSRC_OBJS	= src/cdescent.o src/linregmodel.o src/regression.o src/update.o\
