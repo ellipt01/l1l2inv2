@@ -109,7 +109,7 @@ void		mm_real_axjpy_atomic (const double alpha, const mm_real *x, const int j, m
 mm_real		*mm_real_fread (FILE *fp);
 void		mm_real_fwrite (FILE *stream, const mm_real *x, const char *format);
 
-mm_dense	*mm_real_read_xj (FILE *fp, int j, const int m);
+mm_dense	*mm_real_read_xj_xmatfile (FILE *fp, int j, const int m);
 void		mm_real_x_dot_yk_xmatfile (
 				FILE **fp, const int m, const int n, const bool trans, const double alpha,
 				const mm_dense *y, const int k, const double beta, mm_dense *z

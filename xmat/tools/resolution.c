@@ -36,9 +36,12 @@ usage (char *toolname)
 	fprintf (stderr, "DESCRIPTION:\n");
 	fprintf (stderr, "This program evaluates the model resolution\n");
 	fprintf (stderr, "by performing L1-L2 norm inversion\n");
-	fprintf (stderr, "using the input data of a synthetic anomaly\n");
-	fprintf (stderr, "that produced by a subsurface block\n");
+	fprintf (stderr, "using the synthetic anomaly\n");
+	fprintf (stderr, "produced by a magnetized block\n");
 	fprintf (stderr, "(with dimension of [lx, ly, lz]).\n");
+	fprintf (stderr, "The distance between true model (a magnetized block)\n");
+	fprintf (stderr, "and estimated model indicates the \"resolution\"\n");
+	fprintf (stderr, "at the point where the magnetized block located.\n");
 	fprintf (stderr, "** This is a version that store matrix X in files **\n\n");
 
 	fprintf (stderr, "USAGE: %s\n", p);
@@ -179,13 +182,59 @@ read_input_params (int argc, char **argv)
 	return true;
 }
 
+// read xj from xmat file
+static mm_dense *
+read_xj_from_xmat (int j, int l, int m)
+{
+	mm_dense	*x;
+	char		fn_xmat[80];
+	FILE		*fp_xmat;
+	sprintf (fn_xmat, "x%03d.mat", l);
+	if ((fp_xmat = fopen (fn_xmat, "rb")) == NULL) {
+		fprintf (stderr, "ERROR: cannot open file %s.\n", fn_xmat);
+		exit (1);
+	}
+	x = mm_real_read_xj_xmatfile (fp_xmat, j, m);
+	fclose (fp_xmat);
+	return x;
+}
+
+/* read X of columns in ranges of
+   x in [ix - lx / 2, ix + lx / 2]
+   y in [iy - ly / 2, iy + ly / 2]
+   z in [iz - lz / 2, iz + lz / 2].
+   sum of the above columns is store in y */
+static void
+anomaly_by_grids (mm_dense *y, int i0, int j0, int k0, int lx, int ly, int lz, int m, double *w)
+{
+	int			i, j, k;
+	mm_dense	*x;
+
+	mm_real_set_all (y, 0.);
+	for (i = 0; i < lx; i++) {
+		int		ix = i0 + i;
+		for (j = 0; j < ly; j++) {
+			int		iy = j0 + j;
+			for (k = 0; k < lz; k++) {
+				int		iz = k0 + k;
+				int		s = ix + iy * ngrd[0] + iz * ngrd[0] * ngrd[1];
+				int		l = (int) (s / xfile_len);
+				x = read_xj_from_xmat (s, l, m);
+				// y = norm(x) * x + y
+				mm_real_axjpy (sqrt (w[s]), x, 0, y);
+				mm_real_free (x);
+			}
+		}
+	}
+	return;
+}
+
 bool
 resolution (void)
 {
 	int			i, j, k;
 	int			m, n;
 	simeq		*eq;
-	mm_dense	*x;
 	mm_dense	*xtx;
 
 	if (verbose) fprintf (stderr, "preparing simeq object... ");
@@ -204,15 +253,12 @@ resolution (void)
 			fprintf (stderr, "ERROR: cannot open file %s.\n", fn_xtx);
 			exit (1);
 		}
-		xtx = mm_real_read_xj (fp_xtx, 0, n);
+		xtx = mm_real_read_xj_xmatfile (fp_xtx, 0, n);
 	}
 
 	for (i = 0; i < ngrd[0]; i += incx) {
-
 		for (j = 0; j < ngrd[1]; j += incy) {
-
 			for (k = 0; k < ngrd[2]; k += incz) {
-				int			p, q, r;
 
 				char		path_fn[80];
 				char		info_fn[80];
@@ -229,40 +275,7 @@ resolution (void)
 					sprintf (info_fn, "regression_info%03d%03d%03d.data", ix0 , iy0, iz0);
 				}
 
-				// read X of columns in ranges of
-				// x in [ix - lx / 2, ix + lx / 2]
-				// y in [iy - ly / 2, iy + ly / 2]
-				// z in [iz - lz / 2, iz + lz / 2].
-				// sum of the above columns is store in eq->y
-				mm_real_set_all (eq->y, 0.);
-				for (p = 0; p < lx; p++) {
-					int		ix = i + p;
-					for (q = 0; q < ly; q++) {
-						int		iy = j + q;
-						for (r = 0; r < lz; r++) {
-							int			iz = k + r;
-							int			s = ix + iy * ngrd[0] + iz * ngrd[0] * ngrd[1];
-							int			l = (int) (s / xfile_len);
-
-							{
-								char	fn_xmat[80];
-								FILE	*fp_xmat;
-								sprintf (fn_xmat, "x%03d.mat", l);
-								if ((fp_xmat = fopen (fn_xmat, "rb")) == NULL) {
-									fprintf (stderr, "ERROR: cannot open file %s.\n", fn_xmat);
-									exit (1);
-								}
-								fprintf (stderr, "l = [%d, %d, %d]\n", ix, iy, iz);
-								x = mm_real_read_xj (fp_xmat, s, m);
-								fprintf (stderr, "end\n");
-								fclose (fp_xmat);
-							}
-							// y = norm(x) * x + y
-							mm_real_axjpy (xtx->data[s], x, 0, eq->y);
-							mm_real_free (x);
-						}
-					}
-				}
+				anomaly_by_grids (eq->y, i, j, k, lx, ly, lz, m, xtx->data);
 
 				l1l2inv (eq, path_fn, info_fn);
 

@@ -35,9 +35,12 @@ usage (char *toolname)
 	fprintf (stderr, "DESCRIPTION:\n");
 	fprintf (stderr, "This program evaluates the model resolution\n");
 	fprintf (stderr, "by performing L1-L2 norm inversion\n");
-	fprintf (stderr, "using the input data of a synthetic anomaly\n");
-	fprintf (stderr, "that produced by a subsurface block\n");
+	fprintf (stderr, "using the synthetic anomaly\n");
+	fprintf (stderr, "produced by a magnetized block\n");
 	fprintf (stderr, "(with dimension of [lx, ly, lz]).\n");
+	fprintf (stderr, "The distance between true model (a magnetized block)\n");
+	fprintf (stderr, "and estimated model indicates the \"resolution\"\n");
+	fprintf (stderr, "at the point where the magnetized block located.\n");
 
 	fprintf (stderr, "USAGE: %s\n", p);
 	fprintf (stderr, "       -l [lx:ly:lz: dimension of the synthetic block]\n");

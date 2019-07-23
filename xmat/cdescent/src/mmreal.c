@@ -1591,7 +1591,7 @@ mm_real_fwrite (FILE *stream, const mm_real *x, const char *format)
 
 /*** read xj from file ***/
 mm_dense *
-mm_real_read_xj (FILE *fp, int j, const int m)
+mm_real_read_xj_xmatfile (FILE *fp, int j, const int m)
 {
 	int			k, l;
 	int			ret;
@@ -1612,7 +1612,7 @@ read_xj (FILE **fp, int j, const int m)
 	mm_dense	*a;
 
 	l = (int) (j / xfile_len);
-	a = mm_real_read_xj (fp[l], j, m);
+	a = mm_real_read_xj_xmatfile (fp[l], j, m);
 
 	return a;
 }
