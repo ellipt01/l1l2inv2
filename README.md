@@ -8,9 +8,9 @@ minimize (1/2) * || y - X * beta ||^2 + (1/2) * lambda2 * ||beta||^2+lambda1 * |
 
 where
 
-lambda1, lambda2: regurarization parameter for L1 and L2 norm regularization.
+lambda1, lambda2: regularization parameter for L1 and L2 norm regularization.
 
-beta: subsurfae magnetic model
+beta: subsurface magnetic model
 
 y: observed data vector
 
@@ -34,7 +34,7 @@ according to your system:
 
  * BLAS_LIB: BLAS library path and include dirs
  * GSL_LIB:  GSL library path and include dirs
- * OPENMP_FLG: openMP flag (e.g. -fopenmp etc.)
+ * OPENMP_FLG: openMP flag (e.g. -fopenmp for gcc, etc.)
  * CC: C compiler (gcc, icc, etc.)
 
 After modifying, run make, and make install.
@@ -51,7 +51,7 @@ To see usage of this script, run
 
 $ \<root\>/bin/calc.sh -h
 
-### For quite large probrem
+### For quite large problem
 
 If size of the matrix X is too large, memory allocation will fail and calc.sh will terminate abnormally.
 This is because calc.sh stores matrix X in memory at one time.
@@ -59,7 +59,7 @@ If you treat a large X, that is, when you use very fine grid and/or large observ
 the script calc_xmat.sh is available.
 This script does not store X in memory, but in files, and read them when needed.
 So, calc_xmat.sh uses only small memories, but uses large space of storage.
-Before to run calc_xmat.sh, please confirm you have enought free space in your HDD.
+Before to run calc_xmat.sh, please confirm you have enough free space in your HDD.
 
 ### notice
 By using calc_xmat.sh, the performance of the inversion is reduced
