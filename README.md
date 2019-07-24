@@ -18,7 +18,7 @@ y: observed magnetic anomaly
 
 X: transfer matrix
 
-The optimal lambda is selected using the L curve criterion, with a priori specification of alpha.
+The optimal lambda is selected using the L-curve criterion, with a priori specification of alpha.
 For more detail of the inversion, please see
 
 https://earth-planets-space.springeropen.com/articles/10.1186/s40623-019-1052-4
@@ -29,15 +29,14 @@ This program uses the following external libraries:
  * GSL(Gnu Scientific Libraries)
  * openMP
 
-Before make this program, please install the above libraries in your system.
+Before compile this program, please install the above libraries in your system.
 
 # INSTALLATION
 Before the compilation, copy template file make.config.templ as make.config:
 
 $ cp make.config.templ make.config
 
-and modify the following entries in this file
-according to your system:
+and modify the following entries in this file according to your system:
 
  * BLAS_LIB: BLAS library path and include dirs
  * GSL_LIB:  GSL library path and include dirs
@@ -45,7 +44,7 @@ according to your system:
  * CC: C compiler (gcc, icc, etc.)
 
 After modifying, run make, and make install.
-If you want to install this programs in a specific directory, run
+If you want to install this program in a specific directory, run
 
 $ make install DESTDIR=\<root\>
 
@@ -61,7 +60,7 @@ $ \<root\>/bin/calc.sh -h
 ### For quite large problem
 
 If size of the matrix X is too large, memory allocation will fail and calc.sh will terminate abnormally.
-This is because calc.sh stores matrix X in memory at one time.
+This is because calc.sh tries to store the matrix X in memory at one time.
 If you treat a large X, that is, when you use very fine grid and/or large observation data,
 the script calc_xmat.sh is available.
 This script does not store X in memory, but in files, and read them when needed.
@@ -72,10 +71,16 @@ Before to run calc_xmat.sh, please confirm you have enough free space in your HD
 By using calc_xmat.sh, the performance of the inversion is reduced
 because of the overhead of the accessing to the storage to read the matrix X.
 
+The scripts calc.sh and calc_xmat.sh call the following program internally:
+
+ * bin/l1l2inv, bin/l1l2inv_xmat: main inversion programs
+ * bin/lcurve_interp: derives interpolated L-curve with the aid of the smooth b-spline
+ * bin/optimal_lambda: chooses an optimal lambda using interpolated L-curve
+
 ## Output
 
-calc.sh, and calc_xmat.sh outputs the models for a decreasing sequence of lambda
-to an ascii file beta_path.data.
+calc.sh, and calc_xmat.sh output the models (beta) for a decreasing sequence of lambda
+to an ascii file beta_path.data (or beta_path1.data).
 To extract a model of specific number of iteration, use a support program bin/extract.
 To see the usage of this program, please run
 
