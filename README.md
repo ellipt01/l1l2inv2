@@ -16,7 +16,7 @@ y: observed data vector
 
 X: transfer matrix
 
-# DEPENCENCIES
+# DEPENDENCIES
 This program uses the following external libraries:
  * BLAS
  * GSL(Gnu Scientific Libraries)
@@ -25,11 +25,11 @@ This program uses the following external libraries:
 Before make this program, please install the above libraries in your system.
 
 # INSTALLATION
-Before the compilation, copy
+Before the compilation, copy template file make.config.templ as make.config:
 
 $ cp make.config.templ make.config
 
-and modify the following entries in make.config file
+and modify the following entries in this file
 according to your system:
 
  * BLAS_LIB: BLAS library path and include dirs
