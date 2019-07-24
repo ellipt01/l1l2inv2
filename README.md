@@ -71,7 +71,7 @@ Before to run calc_xmat.sh, please confirm you have enough free space in your HD
 By using calc_xmat.sh, the performance of the inversion is reduced
 because of the overhead of the accessing to the storage to read the matrix X.
 
-The scripts calc.sh and calc_xmat.sh call the following program internally:
+The scripts calc.sh and calc_xmat.sh call the following programs internally:
 
  * bin/l1l2inv, bin/l1l2inv_xmat: main inversion programs
  * bin/lcurve_interp: derives interpolated L-curve with the aid of the smooth b-spline
