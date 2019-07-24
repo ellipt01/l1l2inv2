@@ -4,17 +4,24 @@
 This program performs magnetic inversion with L1-L2 norm combined regularization using CDA,
 via coordinate descent algorithm.
 
-minimize (1/2) * || y - X * beta ||^2 + (1/2) * lambda2 * ||beta||^2+lambda1 * |beta|,
+minimize (1/2) * || y - X * beta ||^2 + (1/2) * lambda * (1 - alpha) * ||beta||^2+lambda * alpha * |beta|,
 
 where
 
-lambda1, lambda2: regularization parameter for L1 and L2 norm regularization.
+lambda: regularization parameter
+
+alpha: hyper-parameter which controls the strength of L1 and L2 norm regularization
 
 beta: subsurface magnetic model
 
-y: observed data vector
+y: observed magnetic anomaly
 
 X: transfer matrix
+
+The optimal lambda is selected using the L curve criterion, with a priori specification of alpha.
+For more detail of the inversion, please see
+
+https://earth-planets-space.springeropen.com/articles/10.1186/s40623-019-1052-4
 
 # DEPENDENCIES
 This program uses the following external libraries:
