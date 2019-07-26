@@ -18,6 +18,7 @@
 
 int		lx, ly, lz;
 int		incx, incy, incz;
+int		nx0, nx1, ny0, ny1, nz0, nz1;
 
 extern void		dcopy_  (const int *n, const double *x, const int *incx, double *y, const int *incy);
 
@@ -54,6 +55,14 @@ usage (char *toolname)
 	fprintf (stderr, "       -t [tolerance: default=1.e-5]\n");
 	fprintf (stderr, "       -m [maximum iteration number: default=1000000]\n");
 	fprintf (stderr, "       -n [lower:upper bounds of solutions]\n");
+	fprintf (stderr, "       -r [range for calculation:\n");
+	fprintf (stderr, "           specify start and end grid number\n");
+	fprintf (stderr, "           to be estimated the resolution.\n");
+	fprintf (stderr, "           format is, grid num of\n");
+	fprintf (stderr, "           xstart:xend:ystart:yend:zstart:zend,\n");
+	fprintf (stderr, "           default is 0:ngrd[0]:0:ngrd[1]:0:ngrd[2],\n");
+	fprintf (stderr, "           if xend, yend, or zend is specified as -1,\n");
+	fprintf (stderr, "           xend=ngrd[0], yend=ngrd[1], zend=ngrd[2] is used]\n");
 	fprintf (stderr, "       -s [parameter setting file: default=./settings]\n");
 	fprintf (stderr, "       -c (use stochastic CDA: default is not use)\n");
 	fprintf (stderr, "       -v (verbose mode)\n");
@@ -72,7 +81,7 @@ read_input_params (int argc, char **argv)
 	bool	set_l = false;
 	bool	set_i = false;
 
-	while ((c = getopt (argc, argv, ":l:i:a:w:t:m:n:s:pcvh")) != EOF) {
+	while ((c = getopt (argc, argv, ":l:i:a:w:t:m:n:r:s:pcvh")) != EOF) {
 
 		switch (c) {
 
@@ -138,6 +147,18 @@ read_input_params (int argc, char **argv)
 				}
 				break;
 
+			case 'r':
+				nsep = num_separator (optarg, ':');
+				if (nsep != 4) {
+					fprintf (stderr, "ERROR: parameter specification invalid: -r %s\n", optarg);
+					return false;
+				}
+				sscanf (optarg, "%d:%d:%d:%d:%d:%d", &nx0, &nx1, &ny0, &ny1, &nz0, &nz1);
+				if (nx1 == -1) nx1 = ngrd[0];
+				if (ny1 == -1) ny1 = ngrd[1];
+				if (nz1 == -1) nz1 = ngrd[2];
+				break;
+
 			case 's':
 				strcpy (sfn, optarg);
 				break;
@@ -193,11 +214,10 @@ resolution (void)
 
 	x = mm_real_new (MM_REAL_DENSE, MM_REAL_GENERAL, m, 1, m);
 
-	for (i = 0; i < ngrd[0]; i += incx) {
+	for (k = nz0; k < nz1; k += incz) {
+		for (j = ny0; j < ny1; j += incy) {
+			for (i = nx0; i < nx1; i += incx) {
 
-		for (j = 0; j < ngrd[1]; j += incy) {
-
-			for (k = 0; k < ngrd[2]; k += incz) {
 				int			p, q, r;
 
 				char		path_fn[80];

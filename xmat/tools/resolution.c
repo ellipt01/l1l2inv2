@@ -21,6 +21,7 @@ int		num_xfiles;
 int		xfile_len;
 int		lx, ly, lz;
 int		incx, incy, incz;
+int		nx0, nx1, ny0, ny1, nz0, nz1;
 
 void
 usage (char *toolname)
@@ -56,6 +57,14 @@ usage (char *toolname)
 	fprintf (stderr, "       -t [tolerance: default=1.e-5]\n");
 	fprintf (stderr, "       -m [maximum iteration number: default=1000000]\n");
 	fprintf (stderr, "       -n [lower:upper bounds of solutions]\n");
+	fprintf (stderr, "       -r [range for calculation:\n");
+	fprintf (stderr, "           specify start and end grid number\n");
+	fprintf (stderr, "           to be estimated the resolution.\n");
+	fprintf (stderr, "           format is, grid num of\n");
+	fprintf (stderr, "           xstart:xend:ystart:yend:zstart:zend,\n");
+	fprintf (stderr, "           default is 0:ngrd[0]:0:ngrd[1]:0:ngrd[2],\n");
+	fprintf (stderr, "           if xend, yend, or zend is specified as -1,\n");
+	fprintf (stderr, "           xend=ngrd[0], yend=ngrd[1], zend=ngrd[2] is used]\n");
 	fprintf (stderr, "       -s [parameter setting file: default=./settings]\n");
 	fprintf (stderr, "       -c (use stochastic CDA: default is not use)\n");
 	fprintf (stderr, "       -v (verbose mode)\n");
@@ -74,7 +83,14 @@ read_input_params (int argc, char **argv)
 	bool	set_l = false;
 	bool	set_i = false;
 
-	while ((c = getopt (argc, argv, ":l:i:a:w:t:m:n:s:pcxvh")) != EOF) {
+	nx0 = 0;
+	nx1 = ngrd[0];
+	ny0 = 0;
+	ny1 = ngrd[2];
+	nz0 = 0;
+	nz1 = ngrd[2];
+
+	while ((c = getopt (argc, argv, ":l:i:a:w:t:m:n:r:s:pcxvh")) != EOF) {
 
 		switch (c) {
 
@@ -138,6 +154,18 @@ read_input_params (int argc, char **argv)
 					fprintf (stderr, "ERROR: invalid parameter specification: -n %s\n", optarg);
 					return false;
 				}
+				break;
+
+			case 'r':
+				nsep = num_separator (optarg, ':');
+				if (nsep != 4) {
+					fprintf (stderr, "ERROR: parameter specification invalid: -r %s\n", optarg);
+					return false;
+				}
+				sscanf (optarg, "%d:%d:%d:%d:%d:%d", &nx0, &nx1, &ny0, &ny1, &nz0, &nz1);
+				if (nx1 == -1) nx1 = ngrd[0];
+				if (ny1 == -1) ny1 = ngrd[1];
+				if (nz1 == -1) nz1 = ngrd[2];
 				break;
 
 			case 's':
@@ -256,9 +284,9 @@ resolution (void)
 		xtx = mm_real_read_xj_xmatfile (fp_xtx, 0, n);
 	}
 
-	for (i = 0; i < ngrd[0]; i += incx) {
-		for (j = 0; j < ngrd[1]; j += incy) {
-			for (k = 0; k < ngrd[2]; k += incz) {
+	for (k = nz0; k < nz1; k += incz) {
+		for (j = ny0; j < ny1; j += incy) {
+			for (i = nx0; i < nx1; i += incx) {
 
 				char		path_fn[80];
 				char		info_fn[80];
