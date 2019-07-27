@@ -163,9 +163,6 @@ read_input_params (int argc, char **argv)
 					return false;
 				}
 				sscanf (optarg, "%d:%d:%d:%d:%d:%d", &nx0, &nx1, &ny0, &ny1, &nz0, &nz1);
-				if (nx1 == -1) nx1 = ngrd[0];
-				if (ny1 == -1) ny1 = ngrd[1];
-				if (nz1 == -1) nz1 = ngrd[2];
 				break;
 
 			case 's':
@@ -328,6 +325,10 @@ main (int argc, char **argv)
 	mgcal_set_scale_factor (magscale);
 
 	fprintf_settings (stderr);
+
+	if (nx1 == -1) nx1 = ngrd[0];
+	if (ny1 == -1) ny1 = ngrd[1];
+	if (nz1 == -1) nz1 = ngrd[2];
 	resolution ();
 
 	return EXIT_SUCCESS;
