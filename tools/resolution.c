@@ -149,7 +149,7 @@ read_input_params (int argc, char **argv)
 
 			case 'r':
 				nsep = num_separator (optarg, ':');
-				if (nsep != 4) {
+				if (nsep != 5) {
 					fprintf (stderr, "ERROR: parameter specification invalid: -r %s\n", optarg);
 					return false;
 				}
