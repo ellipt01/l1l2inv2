@@ -129,9 +129,9 @@ usage (char *toolname)
 	fprintf (stderr, "\n");
 
 	fprintf (stderr, "DESCRIPTION:\n");
-	fprintf (stderr, "This program estimates the optimal regularization parameter lambda,\n");
-	fprintf (stderr, "that realizes the maximum curvature of the L-curve,\n");
-	fprintf (stderr, "with the aid of the B-spline.\n");
+	fprintf (stderr, "This program estimates the optimal regularization parameter lambda\n");
+	fprintf (stderr, "which realizes the maximum curvature of the L-curve\n");
+	fprintf (stderr, "with aid of the smooth B-spline.\n");
 	fprintf (stderr, "NOTE: this program uses GSL(Gnu Scientific Library) version 2.0 or later.\n\n");
 
 	fprintf (stderr, "OUTPUT:\n");
