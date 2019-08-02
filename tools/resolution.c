@@ -16,11 +16,15 @@
 #include "settings.h"
 #include "defaults.h"
 
-int		lx, ly, lz;
-int		incx, incy, incz;
-int		nx0, nx1, ny0, ny1, nz0, nz1;
-
 extern void		dcopy_  (const int *n, const double *x, const int *incx, double *y, const int *incy);
+int				inc = 1;
+
+int				lx, ly, lz;
+int				incx, incy, incz;
+int				nx0 = 0, nx1 = -1;
+int				ny0 = 0, ny1 = -1;
+int				nz0 = 0, nz1 = -1;
+double			bval = 1.;
 
 void
 usage (char *toolname)
@@ -52,17 +56,19 @@ usage (char *toolname)
 
 	fprintf (stderr, "[optional]\n");
 
+	fprintf (stderr, "       -b [intensity of test sources: default is 1 A/m]\n");
 	fprintf (stderr, "       -t [tolerance: default=1.e-5]\n");
 	fprintf (stderr, "       -m [maximum iteration number: default=1000000]\n");
 	fprintf (stderr, "       -n [lower:upper bounds of solutions]\n");
-	fprintf (stderr, "       -r [range for calculation:\n");
-	fprintf (stderr, "           specify start and end grid number\n");
-	fprintf (stderr, "           to be estimated the resolution.\n");
-	fprintf (stderr, "           format is, grid num of\n");
-	fprintf (stderr, "           xstart:xend:ystart:yend:zstart:zend,\n");
-	fprintf (stderr, "           default is 0:ngrd[0]:0:ngrd[1]:0:ngrd[2],\n");
-	fprintf (stderr, "           if xend, yend, or zend is specified as -1,\n");
-	fprintf (stderr, "           xend=ngrd[0], yend=ngrd[1], zend=ngrd[2] is used]\n");
+	fprintf (stderr, "       -r [range for evaluate resolution.\n");
+	fprintf (stderr, "           format is, nx0:nx1:ny0:ny1:nz0:nz1,\n");
+	fprintf (stderr, "           if nx1, ny1, or nz1 is set to -1,\n");
+	fprintf (stderr, "           ngrd[0], ngrd[1], and ngrd[2] is used.\n");
+	fprintf (stderr, "           the test sources are placed on grid numper of\n");
+	fprintf (stderr, "           nx0 to nx1 with inclements of incx,\n");
+	fprintf (stderr, "           ny0 to ny1 with inclements of incy,\n");
+	fprintf (stderr, "           nz0 to nz1 with inclements of incz, respectively.\n");
+	fprintf (stderr, "           default is 0:-1:0:-1:0:-1]\n");
 	fprintf (stderr, "       -s [parameter setting file: default=./settings]\n");
 	fprintf (stderr, "       -c (use stochastic CDA: default is not use)\n");
 	fprintf (stderr, "       -v (verbose mode)\n");
@@ -80,8 +86,10 @@ read_input_params (int argc, char **argv)
 
 	bool	set_l = false;
 	bool	set_i = false;
+	bool	set_a = false;
+	bool	set_w = false;
 
-	while ((c = getopt (argc, argv, ":l:i:a:w:t:m:n:r:s:pcvh")) != EOF) {
+	while ((c = getopt (argc, argv, ":l:i:a:w:b:t:m:n:r:s:pcvh")) != EOF) {
 
 		switch (c) {
 
@@ -107,6 +115,7 @@ read_input_params (int argc, char **argv)
 
 			case 'a':
 				alpha = (double) atof (optarg);
+				set_a = true;
 				break;
 
 			case 'w':
@@ -114,18 +123,25 @@ read_input_params (int argc, char **argv)
 				switch (nsep) {
 					case 0:	// lower
 						log10_lambda_lower = (double) atof (optarg);
+						set_w = true;
 						break;
 					case 1:	// lower:dlambda
 						sscanf (optarg, "%lf:%lf", &log10_lambda_lower, &log10_dlambda);
+						set_w = true;
 						break;
 					case 2:	// lower:dlambda:upper
 						sscanf (optarg, "%lf:%lf:%lf",
 								&log10_lambda_lower, &log10_dlambda, &log10_lambda_upper);
 						use_log10_lambda_upper = true;
+						set_w = true;
 						break;
 					default:
 						break;
 				}
+				break;
+
+			case 'b':
+				bval = (double) atof (optarg);
 				break;
 
 			case 't':
@@ -154,9 +170,6 @@ read_input_params (int argc, char **argv)
 					return false;
 				}
 				sscanf (optarg, "%d:%d:%d:%d:%d:%d", &nx0, &nx1, &ny0, &ny1, &nz0, &nz1);
-				if (nx1 == -1) nx1 = ngrd[0];
-				if (ny1 == -1) ny1 = ngrd[1];
-				if (nz1 == -1) nz1 = ngrd[2];
 				break;
 
 			case 's':
@@ -192,9 +205,38 @@ read_input_params (int argc, char **argv)
 		}
 	}
 
-	if (!set_l || !set_i) return false;
+	if (!set_l || !set_i || !set_a || !set_w) return false;
 
 	return true;
+}
+
+/* read X of columns in ranges of
+   x in [ix - lx / 2, ix + lx / 2]
+   y in [iy - ly / 2, iy + ly / 2]
+   z in [iz - lz / 2, iz + lz / 2].
+   sum of the above columns is store in y */
+static void
+anomaly_by_grids (mm_dense *y, mm_dense *x0, int i0, int j0, int k0, int lx, int ly, int lz, int m)
+{
+	int			i, j, k;
+	mm_dense	*x;
+
+	x = mm_real_new (MM_REAL_DENSE, MM_REAL_GENERAL, m, 1, m);
+	for (i = 0; i < lx; i++) {
+		int		ix = i0 + i;
+		for (j = 0; j < ly; j++) {
+			int		iy = j0 + j;
+			for (k = 0; k < lz; k++) {
+				int		iz = k0 + k;
+				int		s = ix + iy * ngrd[0] + iz * ngrd[0] * ngrd[1];
+				dcopy_ (&m, x0->data + s * m, &inc, x->data, &inc);
+				mm_real_axjpy (bval, x, 0, y);
+			}
+		}
+	}
+	mm_real_free (x);
+
+	return;
 }
 
 bool
@@ -203,65 +245,37 @@ resolution (void)
 	int			i, j, k;
 	int			m, n;
 	simeq		*eq;
-	mm_dense	*x;
+	mm_dense	*x0;
 
 	if (verbose) fprintf (stderr, "preparing simeq object... ");
 	if ((eq = read_input (type, ifn, tfn)) == NULL) return false;
 	if (verbose) fprintf (stderr, "done\n");
 
+	x0 = mm_real_new (MM_REAL_DENSE, MM_REAL_GENERAL, eq->x->m, eq->x->n, eq->x->nnz);
+	mm_real_memcpy (x0, eq->x);
+
 	m = eq->x->m;
 	n = eq->x->n;
 
-	x = mm_real_new (MM_REAL_DENSE, MM_REAL_GENERAL, m, 1, m);
-
+	mm_real_set_all (eq->y, 0.);
 	for (k = nz0; k < nz1; k += incz) {
 		for (j = ny0; j < ny1; j += incy) {
 			for (i = nx0; i < nx1; i += incx) {
-
-				int			p, q, r;
-
-				char		path_fn[80];
-				char		info_fn[80];
-
 				// set output file name
-				{
-					int		ix0, iy0, iz0;
-
-					ix0 = i + (int) ((double) lx / 2.);
-					iy0 = j + (int) ((double) ly / 2.);
-					iz0 = k + (int) ((double) lz / 2.);
-
-					sprintf (path_fn, "beta_path%03d%03d%03d.data", ix0 , iy0, iz0);
-					sprintf (info_fn, "regression_info%03d%03d%03d.data", ix0 , iy0, iz0);
-				}
-
-				// read X of columns in ranges of
-				// x in [ix - lx / 2, ix + lx / 2]
-				// y in [iy - ly / 2, iy + ly / 2]
-				// z in [iz - lz / 2, iz + lz / 2].
-				// sum of the above columns is store in eq->y
-				mm_real_set_all (eq->y, 0.);
-				for (p = 0; p < lx; p++) {
-					int		ix = i + p;
-					for (q = 0; q < ly; q++) {
-						int		iy = j + q;
-						for (r = 0; r < lz; r++) {
-							int		one = 1;
-							int		iz = k + r;
-							int		l = ix + iy * ngrd[0] + iz * ngrd[0] * ngrd[1];
-							dcopy_ (&m, eq->x->data + l, &one, x->data, &one);
-							mm_real_axjpy (1., x, 0, eq->y);
-						}
-					}
-				}
-
-				l1l2inv (eq, path_fn, info_fn);
-
+				anomaly_by_grids (eq->y, x0, i, j, k, lx, ly, lz, m);
 			}
 		}
 	}
 
-	mm_real_free (x);
+	{
+		FILE	*fp_y = fopen ("y.vec", "w");
+		if (fp_y) {
+			mm_real_fwrite (fp_y, eq->y, "%f");
+			fclose (fp_y);
+		}
+	}
+	l1l2inv (eq, NULL, NULL);
+
 	simeq_free (eq);
 
 	return true;
@@ -277,6 +291,9 @@ main (int argc, char **argv)
 	if (!read_settings (sfn)) return EXIT_FAILURE;
 	mgcal_set_scale_factor (magscale);
 
+	if (nx1 == -1) nx1 = ngrd[0];
+	if (ny1 == -1) ny1 = ngrd[1];
+	if (nz1 == -1) nz1 = ngrd[2];
 	fprintf_settings (stderr);
 	resolution ();
 
