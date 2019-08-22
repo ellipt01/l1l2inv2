@@ -52,8 +52,8 @@ $ make install DESTDIR=\<root\>
 # INVERSION
 
 After finishing installation correctly, a script calc.sh should be exists in \<root\>/bin .
-To perform inversion, run this script.
-To see usage of this script, run
+To perform inversion, please run this script.
+You can see the usage of this script by run calc.sh with -h option:
 
 $ \<root\>/bin/calc.sh -h
 
