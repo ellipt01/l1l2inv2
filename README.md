@@ -65,8 +65,8 @@ The requierd data format is
 
 <EW location of obs. point(km)> <NS location(km)> <altitude(km)> <observed anomaly(nT)>
 
-If this file "input.data" is not exists, calc.sh will abort.
-Please show a sample input data file in demo/samples 
+If this file is not exists, calc.sh will abort.
+For more detail, please refer a sample input data file in demo/samples 
 
 #### settings
 The script calc.sh also search a file named "settings" which involves some parameter settings
