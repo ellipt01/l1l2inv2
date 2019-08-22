@@ -70,7 +70,7 @@ For more detail, please refer a sample input data file in demo/samples
 
 #### settings
 The script calc.sh also search a file named "settings" which involves some parameter settings
-such as magnetic inclination, declination, number of grid sells, etc.
+such as magnetic inclination, declination, number of grid cells, etc.
 For more detail, please refer a sample settings file in demo/samples/settings
 (the easiest way is to copy this file to the current directory and edit it).
 
