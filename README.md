@@ -57,6 +57,33 @@ To see usage of this script, run
 
 $ \<root\>/bin/calc.sh -h
 
+### prepare setting-file, data file and terrain data file
+#### input.data
+The script calc.sh searches a file named "input.data" which involves observed magnetic anomaly.
+This file "input.data" has to involve site location and observed magnetic anomaly.
+The requierd data format is
+
+<EW location of obs. point(km)> <NS location(km)> <altitude(km)> <observed anomaly(nT)>
+
+If this file "input.data" is not exists, calc.sh will abort.
+Please show a sample input data file in demo/samples 
+
+#### settings
+The script calc.sh also search a file named "settings" which involves some parameter settings
+such as magnetic inclination, declination, number of grid sells, etc.
+For more detail, please refer a sample settings file in demo/samples/settings
+(the easiest way is to copy this file to the current directory and edit it).
+
+### terrain.data
+If a file named "terrain.data", which involves gridded terrain data, exists on your current directory,
+calc.sh automatically read this file and import terrain data into the inversion program.
+The requierd data format of "terrain.data" is
+
+<EW location(km)> <NS location(km)> <altitude(km)>
+
+The dimensions and number of the terrain grid must consistent with the dimensions
+and horizontal number of the grid cells that subdivide the subsurface space.
+
 ### For quite large problem
 
 If size of the matrix X is too large, memory allocation will fail and calc.sh will terminate abnormally.
