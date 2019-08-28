@@ -168,60 +168,9 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
-echo "$dir"/lcurve_interp -f regression_info.data -a $ALPHA -b $BETA
-"$dir"/lcurve_interp -f regression_info.data -a $ALPHA -b $BETA
-
-
-if [ -e splined.data ]; then
-	mv -f splined.data splined1.data
-fi
-
-rm -f curvature.data
-mv cv.data curvature.data
-
-# find optimal lambda
-res=`cat curvature.data | gawk 'BEGIN{max=0;l=0;j=0}\
-	NR>1{if($2>max){max=$2;l=$1;j=NR+2}}\
-	END{print l,max,j}'`
-lambda=`echo $res | gawk '{print $1}'`
-curv=`echo $res | gawk '{print $2}'`
-lj=`echo $res | gawk '{print $3}'`
-
-if [ `echo "$ALPHA > 0." | bc` == 1 ]; then
-	# L1L2 norm regularization
-	lval=`gawk 'BEGIN{print '$lambda'*'$ALPHA'}'`
-	ltype=1
-elif [ `echo "$ALPHA == 0." | bc` == 1 ]; then
-	# L2 norm regularization
-	lval=$lambda
-	ltype=2
-fi
-
-lx=`echo $lval | gawk '{print round(log($1)/log(10))}\
-	function round(x){return (x>0)?int(x+0.5):int(x-0.5)}'`
-eps=`gawk 'BEGIN{print 10^('$lx'-2)}'`
-
-if [ $ltype -eq 1 ]; then
-	res=`cat regression_info.data\
-		| gawk 'NR>1{if(abs($4-'$lval')<'$eps'){print $3,$1,NR-2;exit}}\
-		function abs(x){return (x<0)?-x:x}'`
-elif [ $ltype -eq 2 ]; then
-	res=`cat regression_info.data\
-		| gawk 'NR>1{if(abs($5-'$lval')<'$eps'){print $3,$2,NR-2;exit}}\
-		function abs(x){return (x<0)?-x:x}'`
-fi
-
-rss=`echo $res | gawk '{print $1}'`
-nrm=`echo $res | gawk '{print $2}'`
-ljopt=`echo $res | gawk '{print $3}'`
-
-echo "lambda = " $lambda >> optimal_info.data
-echo "rss = " $rss >> optimal_info.data
-echo "nrm = " $nrm >> optimal_info.data
-echo "curvature = " $curv >> optimal_info.data
-
-# display optimal lambda
-echo "optimal: lambda["$ljopt"] =" $lambda
+# evaluate curvature of the L-curve
+"$dir"/curvature.sh -f regression_info.data -a $ALPHA -b $BETA >> optimal_info.data
+cat optimal_info.data
 
 # store prev inversion results
 if [ -e "regression_info.data" ]; then

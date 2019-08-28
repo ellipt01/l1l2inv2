@@ -3,7 +3,7 @@ include ../make.config
 
 DESTDIR	= ../bin
 
-SCRIPTS	= calc.sh
+SCRIPTS	= calc.sh curvature.sh
 
 all:
 

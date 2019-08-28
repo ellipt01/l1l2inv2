@@ -136,6 +136,22 @@ read_input (const int type, const char *ifn, const char *tfn, bool create_xmat)
 		free (z);
 		fclose (fp);
 	}
+
+	{
+		double	l = 1000.;
+		g->x[0] -= l / 2.;
+		g->x[g->nx - 1] += l / 2.;
+		g->y[0] -= l / 2.;
+		g->y[g->ny - 1] += l / 2.;
+		g->z[g->nz - 1] -= l / 2.;
+
+		g->dx[0] += l;
+		g->dx[g->nx - 1] += l;
+		g->dy[0] += l;
+		g->dy[g->ny - 1] += l;
+		g->dz[g->nz - 1] -= l;
+	}
+
 	{
 		FILE	*fp;
 		fp = fopen ("grid.data", "w");
