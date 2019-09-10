@@ -44,6 +44,7 @@ usage (char *toolname)
 	fprintf (stderr, "       -b [initial beta: -b <filename>]\n");
 	fprintf (stderr, "       -p (use parallel CDA: default is not use)\n");
 	fprintf (stderr, "       -c (use stochastic CDA: default is not use)\n");
+	fprintf (stderr, "       -o (output y and xtx to y.data and xtx.data)\n");
 	fprintf (stderr, "       -v (verbose mode)\n");
 	fprintf (stderr, "       -h (show this message)\n\n");
 	return;
@@ -56,7 +57,7 @@ read_input_params (int argc, char **argv)
 	int		tmp;
 	char	c;
 
-	while ((c = getopt (argc, argv, ":a:w:t:m:n:s:b:pcvh")) != EOF) {
+	while ((c = getopt (argc, argv, ":a:w:t:m:n:s:b:pcovh")) != EOF) {
 		switch (c) {
 
 			case 'a':
@@ -116,6 +117,10 @@ read_input_params (int argc, char **argv)
 
 			case 'c':
 				stochastic = true;
+				break;
+
+			case 'o':
+				output_vector = true;
 				break;
 
 			case 'v':

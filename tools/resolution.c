@@ -46,6 +46,8 @@ usage (char *toolname)
 	fprintf (stderr, "The distance between true model (a magnetized block)\n");
 	fprintf (stderr, "and estimated model indicates the \"resolution\"\n");
 	fprintf (stderr, "at the point where the magnetized block located.\n");
+	fprintf (stderr, "For the magnetization of the magnetized block,\n");
+	fprintf (stderr, "(no-weighted) actual magnetization is used.\n");
 
 	fprintf (stderr, "USAGE: %s\n", p);
 	fprintf (stderr, "       -l [lx:ly:lz: dimension of the synthetic block]\n");
@@ -267,13 +269,7 @@ resolution (void)
 		}
 	}
 
-	{
-		FILE	*fp_y = fopen ("y.vec", "w");
-		if (fp_y) {
-			mm_real_fwrite (fp_y, eq->y, "%f");
-			fclose (fp_y);
-		}
-	}
+	output_vector = true;
 	l1l2inv (eq, NULL, NULL);
 
 	simeq_free (eq);

@@ -46,6 +46,28 @@ l1l2inv_constraint_func (cdescent *cd, const int j, const double etaj, double *v
 	return true;
 }
 
+static void
+fprintf_vectors (linregmodel *lreg)
+{
+	FILE	*fp;
+
+	fp = fopen ("y.data", "w");
+	if (fp) {
+		int		i;
+		for (i = 0; i < lreg->m; i++) fprintf (fp, "%f\n", lreg->y->data[i]);
+		fclose (fp);
+	}
+
+	fp = fopen ("xtx.data", "w");
+	if (fp) {
+		int		j;
+		for (j = 0; j < lreg->n; j++) fprintf (fp, "%f\n", lreg->xtx[j]);
+		fclose (fp);
+	}
+
+	return;
+}
+
 bool
 l1l2inv (simeq *eq, char *path_fn, char *info_fn)
 {
@@ -61,6 +83,7 @@ l1l2inv (simeq *eq, char *path_fn, char *info_fn)
 	if (verbose) fprintf (stderr, "preparing linregmodel object... ");
 	lreg = linregmodel_new (m, n, num_xfiles, eq->y, eq->d);
 	if (verbose) fprintf (stderr, "done\n");
+	if (output_vector) fprintf_vectors (lreg);
 
 	if (verbose) fprintf (stderr, "preparing cdescent object... ");
 	cd = cdescent_new (alpha, lreg, tol, maxiter, parallel);

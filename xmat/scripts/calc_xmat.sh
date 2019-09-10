@@ -62,15 +62,15 @@ setopts() {
 	fi
 
 	if [ ! -z $USEXMAT ]; then
-		OPTS="-x $OPTS"
+		OPTS="$OPTS -x"
 	fi
 
 	if [ ! -z $STOCHASTIC ]; then
-		OPTS="-c $OPTS"
+		OPTS="$OPTS -c"
 	fi
 
 	if [ ! -z $PARALLEL ]; then
-		OPTS="-p $OPTS"
+		OPTS="$OPTS -p"
 	fi
 
 	if [ ! -z "$VERBOSE" ]; then
