@@ -16,6 +16,11 @@
 #include "settings.h"
 #include "defaults.h"
 
+#define	TYPE_GRID	0
+#define	TYPE_ARRAY	1
+
+int		obs_points_type;
+
 static void
 usage (char *toolname)
 {
@@ -39,7 +44,9 @@ usage (char *toolname)
 	exit (1);
 }
 
-char		pfn[80] = "\0";
+char		ifn[80];
+bool		pfn_specified = false;
+char		pfn[80];
 char		ofn[80];
 double		std = 0.;
 int			seed = 100;
@@ -51,11 +58,17 @@ read_input_params (int argc, char **argv)
 {
 	char	c;
 
+	obs_points_type = TYPE_GRID;
 	strcpy (ofn, "input.data");
-	while ((c = getopt (argc, argv, "f:z:d:r:s:o:h")) != EOF) {
+	while ((c = getopt (argc, argv, "f:z:i:d:r:s:o:h")) != EOF) {
 		switch (c) {
 			case 'f':
 				strcpy (pfn, optarg);
+				pfn_specified = true;
+				break;
+			case 'i':
+				obs_points_type = TYPE_ARRAY;
+				strcpy (ifn, optarg);
 				break;
 			case 'z':
 				zobs_val = (double) atof (optarg);
@@ -81,11 +94,11 @@ read_input_params (int argc, char **argv)
 				break;		
 		}
 	}
-	if (strlen (pfn) <= 1) {
+	if (!pfn_specified) {
 		fprintf (stderr, "ERROR: please specify input parameter file.\n");
 		return false;
 	}
-	if (!zobs) {
+	if (obs_points_type == TYPE_GRID && !zobs) {
 		fprintf (stderr, "ERROR: please specify altitude of observation.\n");
 		return false;
 	}
@@ -93,7 +106,7 @@ read_input_params (int argc, char **argv)
 }
 
 static void
-create_input_data (FILE *stream, const grid *g, const source *s, mgcal_theoretical func)
+create_input_data_by_grid (FILE *stream, const grid *g, const source *s, mgcal_theoretical func)
 {
 	int			n;
 	gsl_rng		*rng = gsl_rng_alloc (gsl_rng_default);
@@ -120,11 +133,40 @@ create_input_data (FILE *stream, const grid *g, const source *s, mgcal_theoretic
 	return;
 }
 
+static void
+create_input_data_by_array (FILE *stream, const data_array *array, const source *s, mgcal_theoretical func)
+{
+	int			n;
+	gsl_rng		*rng = gsl_rng_alloc (gsl_rng_default);
+	double		*a = (double *) malloc (array->n * sizeof (double));
+	vector3d	obs;
+
+	FILE		*fp = fopen ("noise.data", "w");
+
+	gsl_rng_set (rng, seed);
+
+	for (n = 0; n < array->n; n++) {
+		// variance sigma^2 = (mgcal_get_scale_factor () / 5.)^2
+		double	r = (std > 0.) ? gsl_ran_gaussian (rng, std) : 0.;
+		obs.x = array->x[n];
+		obs.y = array->y[n];
+		obs.z = array->z[n];
+		a[n] = func (&obs, s, NULL) + r;
+		if (fp) fprintf (fp, "%.4e\n", r);
+	}
+	if (fp) fclose (fp);
+	fprintf (stderr, "standard deviation of noise: sigma = %f\n", std);
+	fwrite_data_array_with_data (stream, array, a, "%.4f\t%.4f\t%.4f\t%.4f");
+	gsl_rng_free (rng);
+	free (a);
+
+	return;
+}
+
 int
 main (int argc, char **argv)
 {
 	int		n = 1;
-	grid	*g;
 	source	*s;
 	FILE	*fpi;
 	FILE	*fpo;
@@ -147,18 +189,35 @@ main (int argc, char **argv)
 	}
 
 	mgcal_set_scale_factor (magscale);
-	g = grid_new (ngrd[0], ngrd[1], n, xgrd, ygrd, zobs);
 	s = read_model_par (fpi, exf_inc, exf_dec);
 	fclose (fpi);
 	fprintf_sources (stderr, s);
 
 	f = total_force_prism;
 
-	create_input_data (fpo, g, s, f);
+	if (obs_points_type == TYPE_GRID) {
+		grid	*g = grid_new (ngrd[0], ngrd[1], n, xgrd, ygrd, zobs);
+		create_input_data_by_grid (fpo, g, s, f);
+		grid_free (g);
+	} else if (obs_points_type == TYPE_ARRAY) {
+		FILE		*fp;
+		data_array *array;
+
+		fp = fopen (ifn, "r");
+		if (!fp) {
+			fprintf (stderr, "ERROR: cannot open file %s.\nAbort.\n", ifn);
+			return EXIT_FAILURE;
+		}
+		array = fread_data_array (fp);
+		fclose (fp);
+		create_input_data_by_array (fpo, array, s, f);
+	} else {
+		fprintf (stderr, "ERROR: observation points type is invalid.\nAbort.\n");
+		return EXIT_FAILURE;
+	}
 	fclose (fpo);
 
 	source_free (s);
-	grid_free (g);
 
 	return EXIT_SUCCESS;
 }

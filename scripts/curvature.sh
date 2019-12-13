@@ -27,8 +27,7 @@ usage_exit() {
 	exit 1
 }
 
-#dir=`dirname ${BASH_SOURCE}`
-dir="/home/utsugi/local/src/github/l1l2inv2/bin"
+dir=`dirname ${BASH_SOURCE}`
 
 ###
 alpha=0.9
