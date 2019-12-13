@@ -3,9 +3,9 @@
 #endif
 
 #ifndef _LAST_MODIFIED_
-	#define _LAST_MODIFIED_	"20190723"
+	#define _LAST_MODIFIED_	"20191213"
 #endif
 
 #ifndef _VERSION_
-	#define _VERSION_		"0.2.10"
+	#define _VERSION_		"0.2.11"
 #endif
