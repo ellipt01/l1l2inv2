@@ -45,8 +45,9 @@ usage (char *toolname)
 	fprintf (stderr, "       -n [lower:upper bounds of solutions]\n");
 	fprintf (stderr, "       -s [parameter setting file: default=./settings]\n");
 	fprintf (stderr, "       -b [initial beta: -b <filename>]\n");
-	fprintf (stderr, "       -g [0 or 1: stretch the grid cells infinity at the edge\n");
-	fprintf (stderr, "           of the model space, default is 1]\n");
+	fprintf (stderr, "       -g [0(false) or 1(true): stretch the grid cells\n");
+	fprintf (stderr, "           at the edge of the model space outward,\n");
+	fprintf (stderr, "           default is 1]\n");
 	fprintf (stderr, "       -p (use parallel CDA: default is not use)\n");
 	fprintf (stderr, "       -c (use stochastic CDA: default is not use)\n");
 	fprintf (stderr, "       -v (verbose mode)\n");
