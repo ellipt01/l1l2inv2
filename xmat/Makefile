@@ -13,14 +13,13 @@ LIBSRC_OBJS	= src/l1l2inv.o src/simeq.o ../src/smooth.o src/utils.o ../src/setti
 L1L2INV_OBJS= src/main.o
 
 RECOV_OBJS	= tools/recover.o
-RESOL_OBJS	= tools/resolution.o
 
 OBJS		= $(LIBSRC_OBJS) $(L1L2INV_OBJS) $(RECOV_OBJS) $(RESOL_OBJS)
 
 SUBDIRS		= cdescent scripts
 
 PROGRAMS	= l1l2inv_xmat
-TOOLS		= recover_xmat resolution_xmat
+TOOLS		= recover_xmat
 
 all	:		libl1l2inv_xmat $(SUBDIRS) $(PROGRAMS) $(TOOLS)
 
@@ -34,9 +33,6 @@ l1l2inv_xmat:	$(L1L2INV_OBJS) libl1l2inv_xmat
 # TOOLS
 recover_xmat:	$(RECOV_OBJS)
 			$(CC) $(CFLAGS) -o tools/$@ $(RECOV_OBJS) $(CPPFLAGS) $(LOCALLIBS) $(LIBS)
-
-resolution_xmat:	$(RESOL_OBJS)
-			$(CC) $(CFLAGS) -o tools/$@ $(RESOL_OBJS) $(CPPFLAGS) $(LOCALLIBS) $(LIBS)
 
 $(SUBDIRS):	FORCE
 			$(MAKE) -C $@
