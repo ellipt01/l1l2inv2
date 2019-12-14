@@ -41,6 +41,8 @@ usage_exit() {
 	echo "          if -q option is not specified"
 	echo "          (i.e., second-step inversion is not performed),"
 	echo "          this option is ignored"
+	echo "       -g <0 or 1: stretch the grid cells infinity at the edge"
+	echo "           of the model space, default is 1>"
 	echo "       -x (not create new xmat files, instead, use already existings.)"
 	echo "       -q (perform second-step inversion using most opt-lambda;"
 	echo "           default is none)"
@@ -59,6 +61,10 @@ setopts() {
 
 	if [ ! -z "$BOUNDS" ]; then
 		OPTS="-n $BOUNDS $OPTS"
+	fi
+
+	if [ ! -z "$GRID" ]; then
+		OPTS="-g $GRID $OPTS"
 	fi
 
 	if [ ! -z $USEXMAT ]; then
@@ -96,7 +102,7 @@ TOL=1.e-5
 SFILE="./settings"
 BETA=0.01
 
-while getopts "a:w:t:n:s:b:-:xpqcvh" OPT; do
+while getopts "a:w:t:n:s:b:g:-:xpqcvh" OPT; do
 	case "$OPT" in
 		a)  ALPHA=$OPTARG ;;
 		w)  RANGE=$OPTARG ;;
@@ -104,6 +110,7 @@ while getopts "a:w:t:n:s:b:-:xpqcvh" OPT; do
 		n)  BOUNDS=$OPTARG ;;
 		s)  SFILE=$OPTARG ;;
 		b)  BETA=$OPTARG ;;
+		g)  GRID=$OPTARG ;;
 		x)  USEXMAT=1 ;;
 		p)  warning_parallelCDA ;;
 		q)  SPLINE=1 ;;

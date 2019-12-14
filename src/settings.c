@@ -44,7 +44,6 @@ init (void)
 	zgrd[0] = 0.;
 	zgrd[1] = 0.;
 
-	stretching_grid = true;
 	use_dz_array = false;
 	dz = NULL;
 
@@ -93,11 +92,6 @@ read_settings (char *fn)
 			case '5':
 				sscanf (p, "%lf,%lf", &zgrd[0], &zgrd[1]);
 				break;
-			case '6':
-				sscanf (p, "%d", &ret);
-				stretching_grid = (ret == 1);
-				break;
-
 			default:
 				break;
 		}

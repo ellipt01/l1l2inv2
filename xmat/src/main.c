@@ -45,6 +45,8 @@ usage (char *toolname)
 	fprintf (stderr, "       -n [lower:upper bounds of solutions]\n");
 	fprintf (stderr, "       -s [parameter setting file: default=./settings]\n");
 	fprintf (stderr, "       -b [initial beta: -b <filename>]\n");
+	fprintf (stderr, "       -g [0 or 1: stretch the grid cells infinity at the edge\n");
+	fprintf (stderr, "           of the model space, default is 1]\n");
 	fprintf (stderr, "       -p (use parallel CDA: default is not use)\n");
 	fprintf (stderr, "       -c (use stochastic CDA: default is not use)\n");
 	fprintf (stderr, "       -v (verbose mode)\n");
@@ -60,7 +62,8 @@ read_input_params (int argc, char **argv)
 	int		tmp;
 	char	c;
 
-	while ((c = getopt (argc, argv, ":a:w:t:m:n:s:b:pcvxh")) != EOF) {
+	stretch_grid_at_edge = true;
+	while ((c = getopt (argc, argv, ":a:w:t:m:n:s:b:g:pcvxh")) != EOF) {
 		switch (c) {
 
 			case 'a':

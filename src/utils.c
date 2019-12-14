@@ -16,7 +16,7 @@ extern const int	ngrd[];
 extern const double	xgrd[];
 extern const double	ygrd[];
 extern const double	zgrd[];
-extern bool			stretching_grid;
+extern bool			stretch_grid_at_edge;
 extern const bool	use_dz_array;
 extern double		dz[];
 
@@ -138,7 +138,7 @@ read_input (const int type, const char *ifn, const char *tfn)
 		fclose (fp);
 	}
 
-	if (stretching_grid) {
+	if (stretch_grid_at_edge) {
 		double	l = 1000.;
 		g->x[0] -= l / 2.;
 		g->x[g->nx - 1] += l / 2.;
