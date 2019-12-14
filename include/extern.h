@@ -37,6 +37,8 @@ extern bool	output_matrix;
 extern bool	parallel;
 // use stochastic CDA
 extern bool	stochastic;
+// stretching the grid on the edge of the model space
+extern bool	stretching_grid;
 // verbose mode
 extern bool	verbose;
 

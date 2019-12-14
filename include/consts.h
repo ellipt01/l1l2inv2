@@ -14,6 +14,7 @@ double	xgrd[2];
 double	ygrd[2];
 double	zgrd[2];
 
+bool	stretching_grid;
 bool	use_dz_array;
 double	*dz;
 
