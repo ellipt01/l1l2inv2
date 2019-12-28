@@ -26,6 +26,14 @@ fprintf_solution (FILE *stream, const double b0, const mm_dense *beta)
 	return;
 }
 
+void
+fprintf_weighted_solutionpath (FILE *stream, cdescent *cd)
+{
+	double		b0 = cdescent_get_intercept_in_original_scale (cd);
+	fprintf_solution (stream, b0, cd->beta);
+	return;
+}
+
 /* output solution path into FILE *stream
  * iter-th row of outputs indicates beta obtained by iter-th iteration */
 void

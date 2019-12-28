@@ -103,6 +103,7 @@ struct s_cdescent {
 
 	bool					output_fullpath;		// whether to outputs full solution path
 	char					fn_path[128];			// file to output solution path
+	bool					output_rescaled;		// output beta in original scale
 	bool					output_info;			// whether to outputs regression info
 	char					fn_info[128];			// file to output info
 

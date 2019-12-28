@@ -61,7 +61,7 @@ read_input_params (int argc, char **argv)
 	char	c;
 
 	stretch_grid_at_edge = true;
-	while ((c = getopt (argc, argv, ":a:w:t:m:n:s:b:g:pcovh")) != EOF) {
+	while ((c = getopt (argc, argv, ":a:w:t:m:n:s:b:g:pcouvh")) != EOF) {
 		switch (c) {
 
 			case 'a':
@@ -125,6 +125,10 @@ read_input_params (int argc, char **argv)
 
 			case 'o':
 				output_vector = true;
+				break;
+
+			case 'u':
+				output_weighted = true;
 				break;
 
 			case 'g':

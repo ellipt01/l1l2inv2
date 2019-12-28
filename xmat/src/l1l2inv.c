@@ -106,6 +106,7 @@ l1l2inv (simeq *eq, char *path_fn, char *info_fn)
 
 	cdescent_not_use_intercept (cd);
 	if (constraint) cdescent_set_constraint (cd, l1l2inv_constraint_func);
+	if (output_weighted) cd->output_rescaled = false;
 	if (verbose) cd->verbose = true;
 
 	cdescent_set_outputs_fullpath (cd, path_fn);

@@ -31,6 +31,8 @@ bool	use_initial_beta = false;
 bool	constraint = false;
 // output vector to file
 bool	output_vector = false;
+// output weighted beta
+bool	output_weighted = false;
 // output matrix to file
 bool	output_matrix = false;
 // use parallel CDA

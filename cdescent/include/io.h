@@ -8,6 +8,7 @@
 #ifndef IO_H_
 #define IO_H_
 
+void	fprintf_weighted_solutionpath (FILE *stream, cdescent *cd);
 void	fprintf_solutionpath (FILE *stream, cdescent *cd);
 
 #endif /* IO_H_ */

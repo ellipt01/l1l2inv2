@@ -64,7 +64,7 @@ read_input_params (int argc, char **argv)
 	char	c;
 
 	stretch_grid_at_edge = true;
-	while ((c = getopt (argc, argv, ":a:w:t:m:n:s:b:g:pcvxh")) != EOF) {
+	while ((c = getopt (argc, argv, ":a:w:t:m:n:s:b:g:pcouxvh")) != EOF) {
 		switch (c) {
 
 			case 'a':
@@ -126,12 +126,20 @@ read_input_params (int argc, char **argv)
 				stochastic = true;
 				break;
 
-			case 'v':
-				verbose = true;
+			case 'o':
+				output_vector = true;
+				break;
+
+			case 'u':
+				output_weighted = true;
 				break;
 
 			case 'x':
 				create_xmat = false;
+				break;
+
+			case 'v':
+				verbose = true;
 				break;
 
 			case 'h':

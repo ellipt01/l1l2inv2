@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <cdescent.h>
+#include <io.h>
 
 #include "private/private.h"
 
@@ -15,9 +16,6 @@
 extern bool			cdescent_do_update_once_cycle_cyclic (cdescent *cd);
 /* stochastic.c */
 extern bool			cdescent_do_update_once_cycle_stochastic (cdescent *cd);
-
-/* utils.c */
-extern void			fprintf_solutionpath (FILE *stream, cdescent *cd);
 
 typedef bool (*update_one_cycle) (cdescent *cd);
 
@@ -149,7 +147,10 @@ cdescent_do_pathwise_optimization (cdescent *cd)
 		if (!(converged = cdescent_do_update_one_cycle (cd))) break;
 
 		// output solution path
-		if (fp_path) fprintf_solutionpath (fp_path, cd);
+		if (fp_path) {
+			if (cd->output_rescaled) fprintf_solutionpath (fp_path, cd);
+			else fprintf_weighted_solutionpath (fp_path, cd);
+		}
 
 		// output regression info
 		if (fp_info) {

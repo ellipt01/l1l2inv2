@@ -70,6 +70,7 @@ cdescent_alloc (void)
 	cd->log10_dlambda = 0.;
 
 	cd->output_fullpath = false;
+	cd->output_rescaled = true;
 	cd->output_info = false;
 
 	cd->verbose = false;

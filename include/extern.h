@@ -31,6 +31,8 @@ extern bool	use_initial_beta;
 extern bool	constraint;
 // output vector to file
 extern bool	output_vector;
+// output weighted beta
+extern bool	output_weighted;
 // output matrix to file
 extern bool	output_matrix;
 // use parallel CDA

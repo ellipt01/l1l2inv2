@@ -100,6 +100,7 @@ struct s_cdescent {
 	constraint_func			cfunc;					// constraint function
 
 	bool					output_fullpath;		// whether to outputs full solution path
+	bool					output_rescaled;		// output beta in original scale
 	char					fn_path[128];			// file to output solution path
 	bool					output_info;			// whether to outputs regression info
 	char					fn_info[128];			// file to output info
