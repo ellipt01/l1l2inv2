@@ -275,6 +275,14 @@ mm_real_smooth (MMRealFormat format, const int nx, const int ny, const int nz)
 	return d;
 }
 
+/*
+	D = [ 
+			E
+			DX
+			DY
+			DZ
+		]
+*/
 mm_real *
 mm_real_smooth_l01 (MMRealFormat format, const int nx, const int ny, const int nz)
 {
@@ -510,6 +518,13 @@ mm_real_smooth_z_1 (MMRealFormat format, const int nx, const int ny, const int n
 	return (format == MM_REAL_SPARSE) ? mm_real_smooth_sparse_z_1 (nx, ny, nz) : mm_real_smooth_dense_z_1 (nx, ny, nz);
 }
 
+/*
+	D = [ 
+			DX
+			DY
+			DZ
+		]
+*/
 mm_real *
 mm_real_smooth_1 (MMRealFormat format, const int nx, const int ny, const int nz)
 {

@@ -79,6 +79,10 @@ setopts() {
 		OPTS="$OPTS -p"
 	fi
 
+	if [ ! -z $OUTPUT_WEIGHTED ]; then
+		OPTS="$OPTS -u"
+	fi
+
 	if [ ! -z "$VERBOSE" ]; then
 		OPTS="$OPTS -v"
 	fi
@@ -102,7 +106,7 @@ TOL=1.e-5
 SFILE="./settings"
 BETA=0.01
 
-while getopts "a:w:t:n:s:b:g:-:xpqcvh" OPT; do
+while getopts "a:w:t:n:s:b:g:-:xpqcuvh" OPT; do
 	case "$OPT" in
 		a)  ALPHA=$OPTARG ;;
 		w)  RANGE=$OPTARG ;;
@@ -115,6 +119,7 @@ while getopts "a:w:t:n:s:b:g:-:xpqcvh" OPT; do
 		p)  warning_parallelCDA ;;
 		q)  SPLINE=1 ;;
 		c)  STOCHASTIC=1 ;;
+		u)  OUTPUT_WEIGHTED=1 ;;
 		v)  VERBOSE=1 ;;
 		h)  usage_exit ;;
         -)  case "${OPTARG}" in
