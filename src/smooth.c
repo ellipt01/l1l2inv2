@@ -296,18 +296,19 @@ mm_real_smooth_l01 (MMRealFormat format, const int nx, const int ny, const int n
 
 	d0 = mm_real_eye (MM_REAL_SPARSE, nx * ny * nz);
 
-	/* [dx; dy] */
+	/* [E; dx] */
 	dx = mm_real_smooth_x (format, nx, ny, nz);
 	d0x = mm_real_vertcat (d0, dx);
 	mm_real_free (d0);
 	mm_real_free (dx);
 
+	/* [E; dx; dy] */
 	dy = mm_real_smooth_y (format, nx, ny, nz);
 	d0xy = mm_real_vertcat (d0x, dy);
 	mm_real_free (d0x);
 	mm_real_free (dy);
 
-	/* [dx; dy; dz] */
+	/* [E; dx; dy; dz] */
 	dz = mm_real_smooth_z (format, nx, ny, nz);
 	d = mm_real_vertcat (d0xy, dz);
 	mm_real_free (d0xy);
