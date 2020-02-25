@@ -48,57 +48,77 @@ fprintf_cross_section (FILE *stream, bool zfile, const int d, const double c,
 	bool		terrain_specified = false;
 	double		*z = NULL;
 
+	int			start = -1;
+
 	g = grid_new (ngrd[0], ngrd[1], ngrd[2], xgrd, ygrd, zgrd);
 
 	if (z1) terrain_specified = true;
 
 	switch (d) {
 		case CROSS_SECTION_X:
-			n = ngrd[0] * ngrd[2];
-			if (terrain_specified) z = (double *) malloc (ngrd[0] * sizeof (double));
+			n = g->nx * g->nz;
+			if (terrain_specified) z = (double *) malloc (g->nx * sizeof (double));
 			break;
 		case CROSS_SECTION_Y:
-			n = ngrd[1] * ngrd[2];
-			if (terrain_specified) z = (double *) malloc (ngrd[1] * sizeof (double));
+			n = g->ny * g->nz;
+			if (terrain_specified) z = (double *) malloc (g->ny * sizeof (double));
 			break;
 	}
 
 	v = (double *) malloc (n * sizeof (double));
 
-	l = 0;
 	switch (d) {
 		case CROSS_SECTION_X:
+			for (k = 0; k < g->ny; k++) {
+				double	yk = g->y[k];
+				if (c <= yk) {
+					start = k;
+					break;
+				}
+			}
+			if (start < 0) {
+				fprintf (stderr, "ERROR: no valid grid found.\n");
+				exit (1);
+			}
+			l = 0;
 			for (j = 0; j < g->nz; j++) {
-				k = (int) round ((c - g->y[0]) / g->dy[1]) * g->nx + j * g->nh;
 				for (i = 0; i < g->nx; i++) {
-					v[l] = data[k];
-					if (++l >= n) break;
-					k++;
-					if (k >= g->n) break;
+					k = i + start * g->nx + j * g->nh;
+					v[l++] = data[k];
 				}
 			}
 			break;
+
 		case CROSS_SECTION_Y:
+			for (k = 0; k < g->nx; k++) {
+				double	xk = g->x[k];
+				if (c <= xk) {
+					start = k;
+					break;
+				}
+			}
+			if (start < 0) {
+				fprintf (stderr, "ERROR: no valid grid found.\n");
+				exit (1);
+			}
+			l = 0;
 			for (j = 0; j < g->nz; j++) {
-				k = (int) round ((c - g->x[0]) / g->dx[0]) + j * g->nh;
 				for (i = 0; i < g->ny; i++) {
-					v[l] = data[k];
-					if (++l >= n) break;
-					k += g->nx;
-					if (++k >= g->n) break;
+					k = i * g->nx + start + j * g->nh;
+					v[l++] = data[k];
 				}
 			}
 			break;
 	}
 	if (l == 0) {
-		fprintf (stderr, "ERROR: no valid grid is selected.\n");
+		fprintf (stderr, "ERROR: no valid grid found.\n");
 		exit (1);
 	}
-	
+
 	if (terrain_specified) {
 		switch (d) {
 			case CROSS_SECTION_X:
-				k = (int) round ((c - g->y[0]) / g->dy[1]) * g->nx;
+				k = start * g->nx;
 				for (i = 0; i < g->nx; i++) {
 					z[i] = z1[k];
 					k++;
@@ -106,7 +126,7 @@ fprintf_cross_section (FILE *stream, bool zfile, const int d, const double c,
 				}
 				break;
 			case CROSS_SECTION_Y:
-				k = (int) round ((c - g->x[0]) / g->dx[0]);
+				k = start;
 				for (i = 0; i < g->ny; i++) {
 					z[i] = z1[k];
 					k += g->nx;
@@ -116,14 +136,24 @@ fprintf_cross_section (FILE *stream, bool zfile, const int d, const double c,
 		}
 	}
 
-	grid_free (g);
 	switch (d) {
 		case CROSS_SECTION_X:
-		g = grid_new (ngrd[0], 1, ngrd[2], xgrd, &c, zgrd);
-		break;
+			fprintf (stderr, "OUTPUT: cross section through y = %.4f\n", g->y[start]);
+			break;
+
 		case CROSS_SECTION_Y:
-		g = grid_new (1, ngrd[1], ngrd[2], &c, ygrd, zgrd);
-		break;
+			fprintf (stderr, "OUTPUT: cross section through x = %.4f\n", g->x[start]);
+			break;
+	}
+	grid_free (g);
+
+	switch (d) {
+		case CROSS_SECTION_X:
+			g = grid_new (ngrd[0], 1, ngrd[2], xgrd, &c, zgrd);
+			break;
+		case CROSS_SECTION_Y:
+			g = grid_new (1, ngrd[1], ngrd[2], &c, ygrd, zgrd);
+			break;
 	}
 
 	if (terrain_specified) grid_set_surface (g, z);

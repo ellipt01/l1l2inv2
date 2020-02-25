@@ -61,8 +61,12 @@ read_input_params (int argc, char **argv)
 	char	c;
 
 	stretch_grid_at_edge = true;
-	while ((c = getopt (argc, argv, ":a:w:t:m:n:s:b:g:pcouvh")) != EOF) {
+	while ((c = getopt (argc, argv, ":r:a:w:t:m:n:s:b:g:pcouvh")) != EOF) {
 		switch (c) {
+
+			case 'r':
+				type = atoi(optarg);
+				break;
 
 			case 'a':
 				alpha = (double) atof (optarg);

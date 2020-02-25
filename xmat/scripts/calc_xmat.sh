@@ -105,10 +105,12 @@ RANGE="-1:0.1"
 TOL=1.e-5
 SFILE="./settings"
 BETA=0.01
+TYPE=1 # L1L2
 
-while getopts "a:w:t:n:s:b:g:-:xpqcuvh" OPT; do
+while getopts "a:r:w:t:n:s:b:g:-:xpqcuvh" OPT; do
 	case "$OPT" in
 		a)  ALPHA=$OPTARG ;;
+		r) TYPE=$OPTARG ;;
 		w)  RANGE=$OPTARG ;;
 		t)  TOL=$OPTARG ;;
 		n)  BOUNDS=$OPTARG ;;
@@ -148,7 +150,7 @@ if [ -z "$SFILE" -a ! -e "settings" ]; then
 	exit 1
 fi
 
-if [ ! -e "$dir"/l1l2inv ]; then
+if [ ! -e "$dir"/l1l2inv_xmat ]; then
 	echo "ERROR: ${0##*/}: inversion program \"l1l2inv\" is not found"
 	echo "in the directory where this script exists."
 	echo "please compile and install programs correctly"
@@ -171,7 +173,7 @@ echo -n >| optimal_info.data
 #############################################################
 
 echo "$dir"/l1l2inv_xmat -a $ALPHA -w "$RANGE" -t $TOL -s $SFILE ${OPTS}
-"$dir"/l1l2inv_xmat -a $ALPHA -w "$RANGE" -t $TOL -s $SFILE ${OPTS}
+"$dir"/l1l2inv_xmat -a $ALPHA -r $TYPE -w "$RANGE" -t $TOL -s $SFILE ${OPTS}
 
 if [ $? -ne 0 ]; then
 	echo
@@ -258,7 +260,7 @@ if [ ! -z $SPLINE ]; then
 	dll=`gawk 'BEGIN{print (('$llmax')-('$llmin'))/5}'`
 	RANGE=`gawk 'BEGIN{printf("%.8e:%.8e:%.8e",'$llmin','$dll','$llmax')}'`
 	echo "$dir"/l1l2inv_xmat -a $ALPHA -w "$RANGE" -t $TOL -s $SFILE -b beta"$i".data ${OPTS}
-	"$dir"/l1l2inv_xmat -a $ALPHA -w "$RANGE" -t $TOL -s $SFILE -b beta"$i".data ${OPTS}
+	"$dir"/l1l2inv_xmat -a $ALPHA -r $TYPE -w "$RANGE" -t $TOL -s $SFILE -b beta"$i".data ${OPTS}
 
 	if [ $? -ne 0 ]; then
 		echo

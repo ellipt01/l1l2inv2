@@ -136,9 +136,22 @@ create_simeq (const int type, const double inc, const double dec,
 	if (array) eq->y = create_observation (array);
 	if (create_xmat) create_kernel_matrix_xmatfile (inc, dec, array, gsrc, func);
 
-	if (type == TYPE_L0) eq->d = mm_real_eye (MM_REAL_SPARSE, gsrc->n);
-	else if (type == TYPE_L1) eq->d = mm_real_smooth_1 (MM_REAL_SPARSE, gsrc->nx, gsrc->ny, gsrc->nz);
-	else if (type == TYPE_L01) eq->d = mm_real_smooth_l01 (MM_REAL_SPARSE, gsrc->nx, gsrc->ny, gsrc->nz);
+	switch (type) {
+		case TYPE_L1L2:
+			eq->d = mm_real_eye (MM_REAL_SPARSE, gsrc->n);
+			fprintf (stderr, "d = eye\n");
+			break;
+		case TYPE_L1D1:
+			eq->d = mm_real_smooth_1 (MM_REAL_SPARSE, gsrc->nx, gsrc->ny, gsrc->nz);
+			fprintf (stderr, "d = smooth_L1\n");
+			break;
+		case TYPE_L1D01:
+			eq->d = mm_real_smooth_l01 (MM_REAL_SPARSE, gsrc->nx, gsrc->ny, gsrc->nz);
+			fprintf (stderr, "d = smooth_L0_L1\n");
+			break;
+		default:
+			break;
+	}
 
 	return eq;
 }

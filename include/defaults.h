@@ -6,7 +6,7 @@ char	tfn[80] = "terrain.data";
 char	sfn[80] = "settings";
 char	bfn[80];
 
-int		type = TYPE_L0;
+int		type = TYPE_L1L2;
 double	alpha = 1.;
 double	log10_lambda_upper = 0.;
 double	log10_lambda_lower = -4.;

@@ -9,10 +9,10 @@ typedef struct {
 
 enum {
 	TYPE_NONE = -1,
-	TYPE_LASSO = 0,
-	TYPE_L0 = 1,
-	TYPE_L1 = 2,
-	TYPE_L01 = 3
+	TYPE_L1 = 0,
+	TYPE_L1L2 = 1,
+	TYPE_L1D1 = 2,
+	TYPE_L1D01 = 3
 };
 
 simeq	*simeq_new (void);
