@@ -129,7 +129,7 @@ create new linregmodel object
  * const mm_real	*d: general linear penalty operator
 ***/
 linregmodel *
-linregmodel_new (const int m, const int n, int nxfiles, mm_real *y, const mm_real *d)
+linregmodel_new (const int m, const int n, int nxfiles, mm_real *y, mm_real *d)
 {
 	int			j;
 	linregmodel	*lreg;
