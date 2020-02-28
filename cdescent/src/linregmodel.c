@@ -127,7 +127,7 @@ linregmodel_alloc (void)
  * 						DO_NORMALIZING_X: normalizing of each column of x
  * 						DO_STANDARDIZING_X: centering and normalizing of each column of x ***/
 linregmodel *
-linregmodel_new (mm_real *y, mm_real *x, const mm_real *d, PreProc proc)
+linregmodel_new (mm_real *y, mm_real *x, mm_real *d, PreProc proc)
 {
 	int			j;
 	linregmodel	*lreg;

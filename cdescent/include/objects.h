@@ -143,7 +143,7 @@ struct s_linregmodel {
 
 	mm_dense		*y;				// dense general: observed data vector y (must be dense)
 	mm_real			*x;				// sparse/dense symmetric/general: matrix of predictors x
-	const mm_real	*d;				// sparse/dense symmetric/general: linear operator of penalty d
+	mm_real			*d;				// sparse/dense symmetric/general: linear operator of penalty d
 
 	mm_dense		*c;				// = x' * y: correlation (constant) vector
 	double			camax;			// max ( abs (c) )
