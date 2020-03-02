@@ -59,6 +59,10 @@ usage_exit() {
 setopts() {
 	OPTS=""
 
+	if [ ! -z "$WEIGHTS" ]; then
+		OPTS="-d $WEIGHTS $OPTS"
+	fi
+
 	if [ ! -z "$BOUNDS" ]; then
 		OPTS="-n $BOUNDS $OPTS"
 	fi
@@ -107,10 +111,11 @@ SFILE="./settings"
 BETA=0.01
 TYPE=1 # L1L2
 
-while getopts "a:r:w:t:n:s:b:g:-:xpqcuvh" OPT; do
+while getopts "r:d:a:w:t:n:s:b:g:-:xpqcuvh" OPT; do
 	case "$OPT" in
-		a)  ALPHA=$OPTARG ;;
 		r) TYPE=$OPTARG ;;
+		d)  WEIGHTS=$OPTARG ;;
+		a)  ALPHA=$OPTARG ;;
 		w)  RANGE=$OPTARG ;;
 		t)  TOL=$OPTARG ;;
 		n)  BOUNDS=$OPTARG ;;

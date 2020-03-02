@@ -127,7 +127,8 @@ create_kernel_matrix_xmatfile (const double inc, const double dec,
 
 simeq *
 create_simeq (const int type, const double inc, const double dec,
-	const data_array *array, const grid *gsrc, const mgcal_func *func, bool create_xmat)
+	const data_array *array, const grid *gsrc, const mgcal_func *func, const double *w,
+	bool create_xmat)
 {
 	simeq	*eq;
 	FILE	*fp;
@@ -139,15 +140,12 @@ create_simeq (const int type, const double inc, const double dec,
 	switch (type) {
 		case TYPE_L1L2:
 			eq->d = mm_real_eye (MM_REAL_SPARSE, gsrc->n);
-			fprintf (stderr, "d = eye\n");
 			break;
-		case TYPE_L1D1:
-			eq->d = mm_real_smooth_1 (MM_REAL_SPARSE, gsrc->nx, gsrc->ny, gsrc->nz);
-			fprintf (stderr, "d = smooth_L1\n");
+		case TYPE_L1TSV:
+			eq->d = mm_real_smooth_1 (MM_REAL_SPARSE, gsrc->nx, gsrc->ny, gsrc->nz, w);
 			break;
-		case TYPE_L1D01:
-			eq->d = mm_real_smooth_l01 (MM_REAL_SPARSE, gsrc->nx, gsrc->ny, gsrc->nz);
-			fprintf (stderr, "d = smooth_L0_L1\n");
+		case TYPE_L1L2TSV:
+			eq->d = mm_real_smooth_l01 (MM_REAL_SPARSE, gsrc->nx, gsrc->ny, gsrc->nz, w);
 			break;
 		default:
 			break;

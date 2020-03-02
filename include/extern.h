@@ -14,6 +14,8 @@ extern double	log10_dlambda;
 extern double	tol;
 extern int		maxiter;
 
+extern double	*w;
+
 // upper and lower bounds of solution
 extern double	lower;
 extern double	upper;

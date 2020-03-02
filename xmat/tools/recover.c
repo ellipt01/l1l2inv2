@@ -124,7 +124,7 @@ main (int argc, char **argv)
 	mgcal_set_scale_factor (magscale);
 
 	// create simeq
-	if ((eq = read_input (-1, ifn, tfn, create_xmat)) == NULL) return EXIT_FAILURE;
+	if ((eq = read_input (-1, ifn, tfn, NULL, create_xmat)) == NULL) return EXIT_FAILURE;
 
 	m = eq->y->m;
 	n = ngrd[0] * ngrd[1] * ngrd[2];

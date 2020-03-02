@@ -94,7 +94,7 @@ extract_beta (const char *fn, const int j)
 }
 
 simeq *
-read_input (const int type, const char *ifn, const char *tfn)
+read_input (const int type, const char *ifn, const char *tfn, const double *w)
 {
 	simeq		*eq;
 	grid		*g;
@@ -165,7 +165,7 @@ read_input (const int type, const char *ifn, const char *tfn)
 
 	f = total_force_prism;
 	func = mgcal_func_new (f, NULL);
-	eq = create_simeq (type, exf_inc, exf_dec, array, g, func);
+	eq = create_simeq (type, exf_inc, exf_dec, array, g, func, w);
 
 	grid_free (g);
 	data_array_free (array);

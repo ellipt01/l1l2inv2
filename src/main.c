@@ -61,11 +61,27 @@ read_input_params (int argc, char **argv)
 	char	c;
 
 	stretch_grid_at_edge = true;
-	while ((c = getopt (argc, argv, ":r:a:w:t:m:n:s:b:g:pcouvh")) != EOF) {
+	while ((c = getopt (argc, argv, ":r:d:a:w:t:m:n:s:b:g:pcouvh")) != EOF) {
 		switch (c) {
 
 			case 'r':
 				type = atoi(optarg);
+				break;
+
+			case 'd':
+				nsep = num_separator (optarg, ':');
+				switch (nsep) {
+					case 2: // TYPE = TYPE_L1TSV
+						w = (double *) malloc (3 * sizeof (double));
+						sscanf (optarg, "%lf:%lf:%lf", &w[0], &w[1], &w[2]);
+						break;
+					case 3: // TYPE = TYPE_L1L2TSV
+						w = (double *) malloc (4 * sizeof (double));
+						sscanf (optarg, "%lf:%lf:%lf:%lf", &w[0], &w[1], &w[2], &w[3]);
+						break;
+					default:
+						break;
+				}
 				break;
 
 			case 'a':
@@ -169,7 +185,7 @@ run (void)
 	simeq	*eq;
 
 	if (verbose) fprintf (stderr, "preparing simeq object... ");
-	if ((eq = read_input (type, ifn, tfn)) == NULL) return false;
+	if ((eq = read_input (type, ifn, tfn, NULL)) == NULL) return false;
 	if (verbose) fprintf (stderr, "done\n");
 
 	l1l2inv (eq, NULL, NULL);

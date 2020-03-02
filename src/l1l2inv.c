@@ -73,7 +73,7 @@ l1l2inv (simeq *eq, char *path_fn, char *info_fn)
 	if (verbose) fprintf (stderr, "preparing linregmodel object... ");
 	lreg = linregmodel_new (eq->y, eq->x, eq->d, DO_NORMALIZING_X);
 
-	if (type == TYPE_L1D1) {
+	if (type == TYPE_L1TSV || type == TYPE_L1L2TSV) {
 		int		j;
 		for (j = 0; j < lreg->d->n; j++)
 			mm_real_xj_scale (lreg->d, j, 1. / sqrt (lreg->xtx[j]));

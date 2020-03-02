@@ -112,7 +112,7 @@ main (int argc, char **argv)
 	}
 
 	// create simeq
-	if ((eq = read_input (-1, ifn, tfn)) == NULL) return EXIT_FAILURE;
+	if ((eq = read_input (-1, ifn, tfn, NULL)) == NULL) return EXIT_FAILURE;
 
 	// calc and output z = X * beta
 	f = mm_real_new (MM_REAL_DENSE, MM_REAL_GENERAL, eq->x->m, 1, eq->x->m);

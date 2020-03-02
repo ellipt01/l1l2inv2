@@ -14,7 +14,7 @@ double		*get_nth_data (FILE *fp, const int n, int *len);
 mm_dense	*extract_beta (const char *fn, const int j);
 
 // read
-simeq		*read_input (const int type, const char *ifn, const char *tfn, bool create_xmat);
+simeq		*read_input (const int type, const char *ifn, const char *tfn, const double *w, bool create_xmat);
 source		*read_model_par (FILE *fp, const double exf_inc, const double exf_dec);
 
 // output
