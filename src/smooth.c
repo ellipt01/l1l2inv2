@@ -300,10 +300,12 @@ mm_real_smooth_l01 (MMRealFormat format, const int nx, const int ny, const int n
 	dz = mm_real_smooth_z (format, nx, ny, nz);
 
 	if (w) {
-		mm_real_xj_scale (d0, 0, w[0]);
-		mm_real_xj_scale (dx, 0, w[1]);
-		mm_real_xj_scale (dy, 0, w[2]);
-		mm_real_xj_scale (dz, 0, w[3]);
+		int		j;
+		for (j = 0; j < d0->n; j++) mm_real_xj_scale (d0, j, w[0]);
+		for (j = 0; j < dx->n; j++) mm_real_xj_scale (dx, j, w[1]);
+		for (j = 0; j < dy->n; j++) mm_real_xj_scale (dy, j, w[2]);
+		for (j = 0; j < dz->n; j++) mm_real_xj_scale (dz, j, w[3]);
+
 	}
 
 	/* [E; dx] */
@@ -547,9 +549,11 @@ mm_real_smooth_1 (MMRealFormat format, const int nx, const int ny, const int nz,
 	dy = mm_real_smooth_y_1 (format, nx, ny, nz);
 	dz = mm_real_smooth_z_1 (format, nx, ny, nz);
 	if (w) {
-		mm_real_xj_scale (dx, 0, w[0]);
-		mm_real_xj_scale (dy, 0, w[1]);
-		mm_real_xj_scale (dz, 0, w[2]);
+		int		j;
+		fprintf (stderr, "w[0] = %f, w[1] = %f, w[2] = %f\n", w[0], w[1], w[2]);
+		for (j = 0; j < dx->n; j++) mm_real_xj_scale (dx, j, w[0]);
+		for (j = 0; j < dy->n; j++) mm_real_xj_scale (dy, j, w[1]);
+		for (j = 0; j < dz->n; j++) mm_real_xj_scale (dz, j, w[2]);
 	}
 	dxy = mm_real_vertcat (dx, dy);
 	mm_real_free (dx);

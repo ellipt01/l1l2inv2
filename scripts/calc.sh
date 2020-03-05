@@ -73,6 +73,10 @@ setopts() {
 		OPTS="$OPTS -u"
 	fi
 
+	if [ ! -z $ACTUALMAGPENALTY ]; then
+		OPTS="$OPTS -k"
+	fi
+
 	if [ ! -z "$VERBOSE" ]; then
 		OPTS="$OPTS -v"
 	fi
@@ -97,10 +101,11 @@ SFILE="./settings"
 BETA=0.01
 TYPE=1 # L1L2
 
-while getopts "r:d:a:w:t:n:s:b:g:pqcouvh" OPT; do
+while getopts "r:d:a:w:t:n:s:b:g:kpqcouvh" OPT; do
 	case "$OPT" in
 		r)  TYPE=$OPTARG ;;
 		d)  WEIGHTS=$OPTARG ;;
+		k)  ACTUALMAGPENALTY=1 ;;
 		a)  ALPHA=$OPTARG ;;
 		w)  RANGE=$OPTARG ;;
 		t)  TOL=$OPTARG ;;

@@ -17,6 +17,7 @@
 #include "defaults.h"
 
 bool	create_xmat = true;
+bool	penalty_for_actual_magnetization = false;
 
 void
 usage (char *toolname)
@@ -53,6 +54,15 @@ usage (char *toolname)
 	fprintf (stderr, "       -v (verbose mode)\n");
 	fprintf (stderr, "       -x (use already exists xmat files, default=false)\n");
 	fprintf (stderr, "       -h (show this message)\n\n");
+
+	fprintf (stderr, "       -r [regression type: 0=L1,1=L1L2,2=L1TSV,3=L1L2TSV\n");
+	fprintf (stderr, "           default is 1=L1L2]\n"); 
+	fprintf (stderr, "       -d [wx:wy:wz(L1TSV) or w0:wx:wy:wz(L1L2TSV)\n");
+	fprintf (stderr, "           when regression type is 2=L1TSV or 3=L1L2TSV,\n"); 
+	fprintf (stderr, "           quadratic penalty is constructed as\n");
+	fprintf (stderr, "           [wx*Dx;wy*Dy;wz*Dz] or [w0*E;wx*Dx;wy*Dy;wz*Dz]]\n");
+	fprintf (stderr, "       -k (use quadratic penalty for actual magnetization)\n\n");
+
 	return;
 }
 
@@ -64,7 +74,7 @@ read_input_params (int argc, char **argv)
 	char	c;
 
 	stretch_grid_at_edge = true;
-	while ((c = getopt (argc, argv, ":r:d:a:w:t:m:n:s:b:g:pcouxvh")) != EOF) {
+	while ((c = getopt (argc, argv, ":r:d:a:w:t:m:n:s:b:g:kpcouxvh")) != EOF) {
 		switch (c) {
 
 			case 'r':
@@ -75,16 +85,20 @@ read_input_params (int argc, char **argv)
 				nsep = num_separator (optarg, ':');
 				switch (nsep) {
 					case 2:
-						w = (double *) malloc (3 * sizeof (double));
-						sscanf (optarg, "%lf:%lf:%lf", &w[0], &w[1], &w[2]);
+						weight = (double *) malloc (3 * sizeof (double));
+						sscanf (optarg, "%lf:%lf:%lf", &weight[0], &weight[1], &weight[2]);
 						break;
 					case 3:
-						w = (double *) malloc (4 * sizeof (double));
-						sscanf (optarg, "%lf:%lf:%lf:%lf", &w[0], &w[1], &w[2], &w[3]);
+						weight = (double *) malloc (4 * sizeof (double));
+						sscanf (optarg, "%lf:%lf:%lf:%lf", &weight[0], &weight[1], &weight[2], &weight[3]);
 						break;
 					default:
 						break;
 				}
+				break;
+
+			case 'k':
+				penalty_for_actual_magnetization = true;
 				break;
 
 			case 'a':
@@ -179,7 +193,21 @@ read_input_params (int argc, char **argv)
 		}
 	}
 
+	if (type != TYPE_L1 && type != TYPE_L1L2
+		&& type != TYPE_L1TSV && type != TYPE_L1L2TSV) {
+		fprintf (stderr, "ERROR: type must be 0, 1, 2, or 3\n");
+		return false;	
+	}
+
 	return true;
+}
+
+static void
+weight_d (mm_real *d, double *xtx)
+{
+	int		j;
+	for (j = 0; j < d->n; j++) mm_real_xj_scale (d, j, 1. / sqrt (xtx[j]));
+	return;
 }
 
 bool
@@ -188,8 +216,25 @@ run (void)
 	simeq	*eq;
 
 	if (verbose) fprintf (stderr, "preparing simeq object... ");
-	if ((eq = read_input (type, ifn, tfn, NULL, create_xmat)) == NULL) return false;
+	if ((eq = read_input (type, ifn, tfn, weight, create_xmat)) == NULL) return false;
 	if (verbose) fprintf (stderr, "done\n");
+
+	if (penalty_for_actual_magnetization) {
+		double	*xtx;
+		int		n = eq->d->n;
+		FILE	*fp = fopen ("xtx.vec", "rb");
+		if (!fp) {
+			fprintf (stderr, "ERROR: cannot open file xtx.vec.\nprogram abort!\n");
+			exit (1);
+		} else {
+			int	ret;
+			xtx = (double *) malloc (n * sizeof (double));
+			ret = fread (xtx, sizeof (double), n, fp);
+			fclose (fp);
+		}
+		weight_d (eq->d, xtx);
+		free (xtx);
+	}
 
 	l1l2inv (eq, NULL, NULL);
 

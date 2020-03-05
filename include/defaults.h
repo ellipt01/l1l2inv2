@@ -14,7 +14,7 @@ double	log10_dlambda = 0.1;
 double	tol = 1.e-5;
 int		maxiter = 10000000;
 
-double	*w = NULL;
+double	*weight = NULL;
 
 // upper and lower bounds of solution
 double	lower = -INFINITY;
