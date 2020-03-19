@@ -145,7 +145,7 @@ create_simeq (const int type, const double inc, const double dec,
 			eq->d = mm_real_smooth_1 (MM_REAL_SPARSE, gsrc->nx, gsrc->ny, gsrc->nz, w);
 			break;
 		case TYPE_L1L2TSV:
-			eq->d = mm_real_smooth_l01 (MM_REAL_SPARSE, gsrc->nx, gsrc->ny, gsrc->nz, w);
+			eq->d = mm_real_smooth_l01_1 (MM_REAL_SPARSE, gsrc->nx, gsrc->ny, gsrc->nz, w);
 			break;
 		default:
 			break;

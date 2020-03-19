@@ -530,9 +530,9 @@ mm_real_smooth_z_1 (MMRealFormat format, const int nx, const int ny, const int n
 
 /*
 	D = [ 
-			DX
-			DY
-			DZ
+			DX1
+			DY1
+			DZ1
 		]
 */
 mm_real *
@@ -567,3 +567,53 @@ mm_real_smooth_1 (MMRealFormat format, const int nx, const int ny, const int nz,
 	return d;
 }
 
+/*
+	D = [ 
+			E
+			DX1
+			DY1
+			DZ1
+		]
+*/
+mm_real *
+mm_real_smooth_l01_1 (MMRealFormat format, const int nx, const int ny, const int nz, const double *w)
+{
+	mm_real	*d0;
+	mm_real	*dx;
+	mm_real	*dy;
+	mm_real	*dz;
+	mm_real	*d0x;
+	mm_real	*d0xy;
+	mm_real	*d;
+
+	d0 = mm_real_eye (MM_REAL_SPARSE, nx * ny * nz);
+	dx = mm_real_smooth_x_1 (format, nx, ny, nz);
+	dy = mm_real_smooth_y_1 (format, nx, ny, nz);
+	dz = mm_real_smooth_z_1 (format, nx, ny, nz);
+
+	if (w) {
+		int		j;
+		for (j = 0; j < d0->n; j++) mm_real_xj_scale (d0, j, w[0]);
+		for (j = 0; j < dx->n; j++) mm_real_xj_scale (dx, j, w[1]);
+		for (j = 0; j < dy->n; j++) mm_real_xj_scale (dy, j, w[2]);
+		for (j = 0; j < dz->n; j++) mm_real_xj_scale (dz, j, w[3]);
+
+	}
+
+	/* [E; dx] */
+	d0x = mm_real_vertcat (d0, dx);
+	mm_real_free (d0);
+	mm_real_free (dx);
+
+	/* [E; dx; dy] */
+	d0xy = mm_real_vertcat (d0x, dy);
+	mm_real_free (d0x);
+	mm_real_free (dy);
+
+	/* [E; dx; dy; dz] */
+	d = mm_real_vertcat (d0xy, dz);
+	mm_real_free (d0xy);
+	mm_real_free (dz);
+
+	return d;
+}
