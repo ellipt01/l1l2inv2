@@ -5,8 +5,8 @@ DESTDIR		= ./bin
 DESTLIBDIR	= ./lib
 
 LOCALLIBS	= -L./lib -ll1l2inv -lcdescent -lmgcal
-LIBS		= $(BLAS_LIB) $(GSL_LIB) -lm $(OPENMP_FLG)
-CPPFLAGS	= -I./include -I./mgcal/include -I./cdescent/include
+LIBS		= $(BLAS_LIB) $(GSL_LIB)
+CPPFLAGS	= -I./include -I./mgcal/include -I./cdescent/include -lm $(OPENMP_FLG)
 
 LIBSRC_OBJS	= src/l1l2inv.o src/simeq.o src/smooth.o src/utils.o src/settings.o
 

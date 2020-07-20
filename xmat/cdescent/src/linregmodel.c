@@ -168,7 +168,7 @@ linregmodel_new (const int m, const int n, int nxfiles, mm_real *y, mm_real *d)
 		sprintf (fn, "x%03d.mat", j);
 		lreg->fp_xmat[j] = fopen (fn, "rb");
 		if (!lreg->fp_xmat[j]) {
-			char	msg[80];
+			char	msg[BUFSIZ];
 			sprintf (msg, "cannot open file %s.\nprogram abort!", fn);
 			error_and_exit ("linregmodel_new", msg, __FILE__, __LINE__);
 		}
