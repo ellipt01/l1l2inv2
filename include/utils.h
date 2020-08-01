@@ -26,6 +26,7 @@ int			fread_ndata_of_one_line (FILE *fp);
 double		*fread_one_line (FILE *fp, int len);
 void		fprintf_zfile_2d (FILE *stream, grid *g, const int dir, const double *v);
 void		fprintf_zfile_3d (FILE *stream, grid *g, const double *v);
+void		fprintf_regularization_type (FILE *stream, const int type);
 void		fprintf_sources (FILE *stream, const source *s);
 void		version_info (const char *toolname);
 

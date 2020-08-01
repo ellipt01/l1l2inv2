@@ -392,6 +392,38 @@ fprintf_zfile_3d (FILE *stream, grid *g, const double *v)
 }
 
 void
+fprintf_regularization_type (FILE *stream, const int type)
+{
+	fprintf (stream, "regularization type: ");
+	switch (type) {
+		case TYPE_L1L2:
+			fprintf (stream, "L1 & L2,\n");
+			fprintf (stream, "* penalty:\n");
+			fprintf (stream, "* P(b) = (1-a)*||I*b||^2/2 + a*|b|,\n");
+			fprintf (stream, "* a = mixing ratio,\n");
+			fprintf (stream, "* I = identity matrix.\n");
+			break;
+		case TYPE_L1TSV:
+			fprintf (stream, "L1 & Total Squared Valiation,\n");
+			fprintf (stream, "* penalty:\n");
+			fprintf (stream, "* P(b) = (1-a)*||D*b||^2/2 + a*|b|,\n");
+			fprintf (stream, "* a = mixing ratio,\n");
+			fprintf (stream, "* D = TV operator.\n");
+			break;
+		case TYPE_L1L2TSV:
+			fprintf (stream, "L1 & L2 & Total Squared Valiation,\n");
+			fprintf (stream, "* penalty:\n");
+			fprintf (stream, "* P(b) = (1-a)*(||I*b||^2 + ||D*b||^2)/2 + a*|b|,\n");
+			fprintf (stream, "* a = mixing ratio,\n");
+			fprintf (stream, "* I = identity matrix, D = TV operator.\n");
+			break;
+		default:
+			break;
+	}
+	return;
+}
+
+void
 fprintf_sources (FILE *stream, const source *s)
 {
 	source_item	*i;

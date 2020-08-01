@@ -18,7 +18,7 @@
 
 bool	penalty_for_actual_magnetization = false;
 
-void
+static void
 usage (char *toolname)
 {
 	char	*p = strrchr (toolname, '/');
@@ -239,7 +239,10 @@ main (int argc, char **argv)
 	if (!read_settings (sfn)) return EXIT_FAILURE;
 	mgcal_set_scale_factor (magscale);
 
-	fprintf_settings (stderr);
+	if (verbose) {
+		fprintf_regularization_type (stderr, type);
+		fprintf_settings (stderr);
+	}
 	run ();
 
 	return EXIT_SUCCESS;

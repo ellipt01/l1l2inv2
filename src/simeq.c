@@ -187,15 +187,12 @@ create_simeq (const int type, const double inc, const double dec,
 	switch (type) {
 		case TYPE_L1L2:
 			eq->d = mm_real_eye (MM_REAL_SPARSE, eq->x->n);
-			fprintf (stderr, "TYPE: TYPE_L1L2\n");
 			break;
 		case TYPE_L1TSV:
 			eq->d = mm_real_smooth_1 (MM_REAL_SPARSE, gsrc->nx, gsrc->ny, gsrc->nz, w);
-			fprintf (stderr, "TYPE: TYPE_L1TSV\n");
 			break;
 		case TYPE_L1L2TSV:
 			eq->d = mm_real_smooth_l01_1 (MM_REAL_SPARSE, gsrc->nx, gsrc->ny, gsrc->nz, w);
-			fprintf (stderr, "TYPE: TYPE_L1L2TSV\n");
 			break;
 		default:
 			break;

@@ -28,6 +28,7 @@ void		fprintf_zfile_2d (FILE *stream, grid *g, const int dir, const double *v,
 							  const double *t, const double *offset);
 void		fprintf_zfile_3d (FILE *stream, grid *g, const double *v,
 							 const double *t, const double *offset);
+void		fprintf_regularization_type (FILE *stream, const int type);
 void		fprintf_sources (FILE *stream, const source *s);
 void		version_info (const char *toolname);
 
