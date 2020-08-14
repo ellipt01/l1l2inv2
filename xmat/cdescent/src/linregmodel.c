@@ -164,7 +164,7 @@ linregmodel_new (const int m, const int n, int nxfiles, mm_real *y, mm_real *d)
 
 	lreg->fp_xmat = (FILE **) malloc (num_xfiles * sizeof (FILE *));
 	for (j = 0; j < num_xfiles; j++) {
-		char	fn[80];
+		char	fn[BUFSIZ];
 		sprintf (fn, "x%03d.mat", j);
 		lreg->fp_xmat[j] = fopen (fn, "rb");
 		if (!lreg->fp_xmat[j]) {
