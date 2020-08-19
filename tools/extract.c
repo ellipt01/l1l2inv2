@@ -18,6 +18,8 @@ int			idx = -1;
 char		*fn = NULL;
 char		*ter_fn = NULL;
 
+int			len_fn = 256;
+
 typedef enum {
 	OUTPUT_TO_GRID,
 	OUTPUT_TO_MMREAL
@@ -30,15 +32,27 @@ fprintf_grid (FILE *stream, const double *data, char *fn_ter)
 {
 	grid	*g = grid_new (ngrd[0], ngrd[1], ngrd[2], xgrd, ygrd, zgrd);
 	if (fn_ter) {
-		FILE	*fp = fopen (ter_fn, "r");
+		// if terrain file name "fn_ter" is specified, try to read it 
+		FILE	*fp = fopen (fn_ter, "r");
 		if (fp) {
 			double	*z = fread_z (fp, g->nh);
 			grid_set_surface (g, z);
 			free (z);
 			fclose (fp);
 		} else {
-			fprintf (stderr, "WARNING: terrain file %s not exists.\n", ter_fn);
+			fprintf (stderr, "WARNING: terrain file %s not exists.\n", fn_ter);
 		}
+	} else {
+		// if fn_ter is not specified,
+		// try to read default terrain file tfn = "./terrain.data" 
+		FILE	*fp = fopen (tfn, "r");
+		if (fp) {
+			double	*z = fread_z (fp, g->nh);
+			grid_set_surface (g, z);
+			free (z);
+			fclose (fp);
+		}
+		// else, terrain is ignored and assume to be a flat plane
 	}
 	fwrite_grid_with_data (stdout, g, data, NULL);
 	grid_free (g);
@@ -53,7 +67,7 @@ read_input_params (int argc, char **argv)
 	while ((c = getopt (argc, argv, "f:i:o:t:s:h")) != EOF) {
 		switch (c) {
 			case 'f':
-				fn = (char *) malloc (80 * sizeof (char));
+				fn = (char *) malloc (len_fn * sizeof (char));
 				strcpy (fn, optarg);
 				break;
 			case 'i':
@@ -63,7 +77,7 @@ read_input_params (int argc, char **argv)
 				oformat = (atoi (optarg) == 0) ? OUTPUT_TO_GRID : OUTPUT_TO_MMREAL;
 				break;
 			case 't':
-				ter_fn = (char *) malloc (80 * sizeof (char));
+				ter_fn = (char *) malloc (len_fn * sizeof (char));
 				strcpy (ter_fn, optarg);
 				break;
 			case 's':
