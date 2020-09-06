@@ -252,6 +252,10 @@ cdescent_use_fixed_lambda (cdescent *cd, const double lambda)
 void
 cdescent_use_fixed_lambda1 (cdescent *cd, const double lambda1)
 {
+	if (fabs (cd->alpha1) < DBL_EPSILON) {
+		const char	msg[] = "conflicted settings were specified: alpha1=0 and use_fixed_lambda1=true";
+		printf_warning ("cdescent_use_fixed_lambda1", msg, __FILE__, __LINE__);
+	}
 	cd->use_fixed_lambda1 = true;
 	cd->lambda1 = lambda1;
 	return;
@@ -260,6 +264,10 @@ cdescent_use_fixed_lambda1 (cdescent *cd, const double lambda1)
 void
 cdescent_use_fixed_lambda2 (cdescent *cd, const double lambda2)
 {
+	if (fabs (cd->alpha2) < DBL_EPSILON) {
+		const char	msg[] = "conflicted settings were specified: alpha2=0 and use_fixed_lambda2=true";
+		printf_warning ("cdescent_use_fixed_lambda2", msg, __FILE__, __LINE__);
+	}
 	cd->use_fixed_lambda2 = true;
 	cd->lambda2 = lambda2;
 	return;
