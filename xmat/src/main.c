@@ -49,6 +49,12 @@ usage (char *toolname)
 	fprintf (stderr, "       -g [0(false) or 1(true): stretch the grid cells\n");
 	fprintf (stderr, "           at the edge of the model space outward,\n");
 	fprintf (stderr, "           default is 1]\n");
+	fprintf (stderr, "       -d [use fixed lambda1 or lambda2:\n");
+	fprintf (stderr, "           <1(lambda1) or 2(lambda2)>:lambda val,\n");
+	fprintf (stderr, "           to perform CDA with respect to lambda1\n");
+	fprintf (stderr, "           with fixing lambda2, please specify -d 2:<value>,\n");
+	fprintf (stderr, "           and CDA with respect to lambda2\n");
+	fprintf (stderr, "           with fixing lambda1, -d 1:<value>\n");
 	fprintf (stderr, "       -p (use parallel CDA: default is not use)\n");
 	fprintf (stderr, "       -c (use stochastic CDA: default is not use)\n");
 	fprintf (stderr, "       -v (verbose mode)\n");
@@ -57,7 +63,7 @@ usage (char *toolname)
 
 	fprintf (stderr, "       -r [regression type: 0=L1,1=L1L2,2=L1TSV,3=L1L2TSV\n");
 	fprintf (stderr, "           default is 1=L1L2]\n"); 
-	fprintf (stderr, "       -d [wx:wy:wz(L1TSV) or w0:wx:wy:wz(L1L2TSV)\n");
+	fprintf (stderr, "       -i [wx:wy:wz(L1TSV) or w0:wx:wy:wz(L1L2TSV)\n");
 	fprintf (stderr, "           when regression type is 2=L1TSV or 3=L1L2TSV,\n"); 
 	fprintf (stderr, "           quadratic penalty is constructed as\n");
 	fprintf (stderr, "           [wx*Dx;wy*Dy;wz*Dz] or [w0*E;wx*Dx;wy*Dy;wz*Dz]]\n");
@@ -74,14 +80,14 @@ read_input_params (int argc, char **argv)
 	char	c;
 
 	stretch_grid_at_edge = true;
-	while ((c = getopt (argc, argv, ":r:d:a:w:t:m:n:s:b:g:kpcouxvh")) != EOF) {
+	while ((c = getopt (argc, argv, ":r:i:a:w:t:m:n:s:b:g:d:kpcouxvh")) != EOF) {
 		switch (c) {
 
 			case 'r':
 				type = atoi(optarg);
 				break;
 
-			case 'd':
+			case 'i':
 				nsep = num_separator (optarg, ':');
 				switch (nsep) {
 					case 2:
@@ -166,6 +172,35 @@ read_input_params (int argc, char **argv)
 
 			case 'u':
 				output_weighted = true;
+				break;
+
+			case 'g':
+				stretch_grid_at_edge = (atoi (optarg) == 1);
+				break;
+
+			case 'd':
+				if (num_separator (optarg, ':') <= 0) {
+					fprintf (stderr, "ERROR: invalid parameter specification: -d %s\n", optarg);
+					return false;
+				}
+				{
+					int		id;
+					double	val;
+					sscanf (optarg, "%d:%lf", &id, &val);
+					switch (id) {
+						case 1:
+							use_fixed_lambda1 = true;
+							fixed_lambda1 = val;
+							break;
+						case 2:
+							use_fixed_lambda2 = true;
+							fixed_lambda2 = val;
+							break;
+						default:
+							fprintf (stderr, "ERROR: invalid parameter specification: -d %s\n", optarg);
+							return false;
+					}
+				}	
 				break;
 
 			case 'x':

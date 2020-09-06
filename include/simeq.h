@@ -9,7 +9,6 @@ typedef struct {
 
 enum {
 	TYPE_NONE = -1,
-	TYPE_L1 = 0,
 	TYPE_L1L2 = 1,
 	TYPE_L1TSV = 2,
 	TYPE_L1L2TSV = 3

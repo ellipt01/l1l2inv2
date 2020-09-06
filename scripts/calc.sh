@@ -32,6 +32,7 @@ usage_exit() {
 	echo "          this option is ignored"
 	echo "       -g <0(false) or 1(true): stretch the grid cells"
 	echo "           at the edge of the model space outward, default is 1>"
+	echo "       -d <use fixed lambda1 or lambda2: 1(lambda1) or 2(lambda2):lambda val"
 	echo "       -p (perform CDA using parallel computing; default is none)"
 	echo "       -q (perform second-step inversion using most opt-lambda;"
 	echo "           default is none)"
@@ -55,6 +56,10 @@ setopts() {
 
 	if [ ! -z "$GRID" ]; then
 		OPTS="-g $GRID $OPTS"
+	fi
+
+	if [ ! -z "$FIXLAMBDA" ]; then
+		OPTS="-d $FIXLAMBDA $OPTS"
 	fi
 
 	if [ ! -z $STOCHASTIC ]; then
@@ -100,8 +105,7 @@ TOL=1.e-5
 SFILE="./settings"
 BETA=0.01
 TYPE=1 # L1L2
-
-while getopts "r:d:a:w:t:n:s:b:g:kpqcouvh" OPT; do
+while getopts "r:d:a:w:t:n:s:b:g:d:kpqcouvh" OPT; do
 	case "$OPT" in
 		r)  TYPE=$OPTARG ;;
 		d)  WEIGHTS=$OPTARG ;;
@@ -113,6 +117,7 @@ while getopts "r:d:a:w:t:n:s:b:g:kpqcouvh" OPT; do
 		s)  SFILE=$OPTARG ;;
 		b)  BETA=$OPTARG ;;
 		g)  GRID=$OPTARG ;;
+		d)  FIXLAMBDA=$OPTARG ;;
 		p)  PARALLEL=1 ;;
 		q)  SPLINE=1 ;;
 		c)  STOCHASTIC=1 ;;

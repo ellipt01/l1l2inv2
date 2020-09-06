@@ -105,6 +105,9 @@ l1l2inv (simeq *eq, char *path_fn, char *info_fn)
 		cdescent_set_stochastic (cd, (unsigned int *) &t);
 	}
 
+	if (use_fixed_lambda1) cdescent_use_fixed_lambda1 (cd, fixed_lambda1);
+	if (use_fixed_lambda2) cdescent_use_fixed_lambda2 (cd, fixed_lambda2);
+
 	cdescent_not_use_intercept (cd);
 	if (constraint) cdescent_set_constraint (cd, l1l2inv_constraint_func);
 	if (output_weighted) cd->output_rescaled = false;

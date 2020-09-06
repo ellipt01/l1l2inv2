@@ -36,7 +36,10 @@ cdescent_alloc (void)
 	cd->use_penalty_factor = false;
 	cd->is_regtype_lasso = true;
 	cd->use_intercept = true;
-	cd->use_fixed_lambda = false;
+
+	cd->use_fixed_lambda1 = false;
+	cd->use_fixed_lambda2 = false;
+
 	cd->rule = CDESCENT_SELECTION_RULE_CYCLIC;
 
 	cd->m = NULL;
@@ -102,7 +105,9 @@ cdescent_new (const double alpha, const linregmodel *lreg, const double tol, con
 	cd->alpha2 = 1. - alpha;
 
 	/* if cd->lreg->d == NULL, regression type is Lasso */
-	cd->is_regtype_lasso =  (cd->lreg->d == NULL);
+	//cd->is_regtype_lasso =  (cd->lreg->d == NULL);
+	/* if alpha == 1, regression type is Lasso */
+	cd->is_regtype_lasso =  (fabs (1. - alpha) < DBL_EPSILON);
 
 	cd->lambda = (cd->alpha1 > 0.) ? cd->lreg->camax / cd->alpha1 : cd->lreg->camax;
 	cd->lambda1 = cd->alpha1 * cd->lambda;
@@ -222,6 +227,7 @@ is_regtype_l2 (const cdescent *cd)
 	return (fabs (cd->alpha2 - 1.) < DBL_EPSILON);
 }
 
+/*
 void
 cdescent_use_fixed_lambda (cdescent *cd, const double lambda)
 {
@@ -241,10 +247,28 @@ cdescent_use_fixed_lambda (cdescent *cd, const double lambda)
 	}
 	return;
 }
+*/
+
+void
+cdescent_use_fixed_lambda1 (cdescent *cd, const double lambda1)
+{
+	cd->use_fixed_lambda1 = true;
+	cd->lambda1 = lambda1;
+	return;
+}
+
+void
+cdescent_use_fixed_lambda2 (cdescent *cd, const double lambda2)
+{
+	cd->use_fixed_lambda2 = true;
+	cd->lambda2 = lambda2;
+	return;
+}
 
 /*** set cd->lambda1
  * if designated lambda1 >= cd->lambda1_max, cd->lambda1 is set to cd->lambda1_max and return false
  * else cd->lambda1 is set to lambda1 and return true ***/
+/*
 void
 cdescent_set_lambda (cdescent *cd, const double lambda)
 {
@@ -259,6 +283,15 @@ cdescent_set_lambda (cdescent *cd, const double lambda)
 			cd->lambda2 = lambda;
 		}
 	}
+	return;
+}
+*/
+void
+cdescent_set_lambda (cdescent *cd, const double lambda)
+{
+	cd->lambda = lambda;
+	if (!cd->use_fixed_lambda1) cd->lambda1 = cd->alpha1 * lambda;
+	if (!cd->use_fixed_lambda2) cd->lambda2 = cd->alpha2 * lambda;
 	return;
 }
 

@@ -44,4 +44,9 @@ bool	stochastic = false;
 // verbose mode
 bool	verbose = false;
 
+bool	use_fixed_lambda1 = false;
+double	fixed_lambda1 = 0.;
+bool	use_fixed_lambda2 = false;
+double	fixed_lambda2 = 0.;
+
 #endif // _DEFAULTS_H_

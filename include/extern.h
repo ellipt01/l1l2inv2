@@ -26,24 +26,29 @@ extern double	lambda;
 extern double	magscale;
 
 /*** FLAGS ***/
-extern bool	use_log10_lambda_upper;
+extern bool		use_log10_lambda_upper;
 // use initial beta
-extern bool	use_initial_beta;
+extern bool		use_initial_beta;
 // use upper and lower limits of solutions
-extern bool	constraint;
+extern bool		constraint;
 // output vector to file
-extern bool	output_vector;
+extern bool		output_vector;
 // output weighted beta
-extern bool	output_weighted;
+extern bool		output_weighted;
 // output matrix to file
-extern bool	output_matrix;
+extern bool		output_matrix;
 // use parallel CDA
-extern bool	parallel;
+extern bool		parallel;
 // use stochastic CDA
-extern bool	stochastic;
+extern bool		stochastic;
 // stretching the grid on the edge of the model space
-extern bool	stretching_grid;
+extern bool		stretching_grid;
 // verbose mode
-extern bool	verbose;
+extern bool		verbose;
+
+extern bool		use_fixed_lambda1;
+extern double	fixed_lambda1;
+extern bool		use_fixed_lambda2;
+extern double	fixed_lambda2;
 
 #endif // _EXTERN_H_

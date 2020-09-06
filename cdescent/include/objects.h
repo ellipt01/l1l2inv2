@@ -64,16 +64,18 @@ struct s_cdescent {
 	bool					was_modified;			// whether this object was modified after created
 
 	/* whether regression type is Lasso */
-	bool					is_regtype_lasso;		// = (d == NULL)
+	bool					is_regtype_lasso;		// = (alpha == 1)
 	bool					use_penalty_factor;		// whether use penalty factor
 	bool					use_intercept;			// whether use intercept (default is true)
-	bool					use_fixed_lambda;		// use fixed lambda value (default is false)
+
+	bool					use_fixed_lambda1;		// use fixed lambda1 value (default is false)
+	bool					use_fixed_lambda2;		// use fixed lambda2 value (default is false)
+
 	CoordinateSelectionRule	rule;					// decide cyclic or stochastic coordinate descent
 
 	const int				*m;						// number of observations, points cd->lreg->y->m
 	const int				*n;						// number of variables, points cd->lreg->x->n
 	const linregmodel		*lreg;					// linear regression model
-
 
 	double					alpha1;					// ratio of weight for L1 and L2 norm penalty
 	double					alpha2;					// = 1. - alpha

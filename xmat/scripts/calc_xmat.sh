@@ -43,6 +43,7 @@ usage_exit() {
 	echo "          this option is ignored"
 	echo "       -g <0(false) or 1(true): stretch the grid cells"
 	echo "           at the edge of the model space outward, default is 1>"
+	echo "       -d <use fixed lambda1 or lambda2: 1(lambda1) or 2(lambda2):lambda val"
 	echo "       -x (not create new xmat files, instead, use already existings.)"
 	echo "       -q (perform second-step inversion using most opt-lambda;"
 	echo "           default is none)"
@@ -69,6 +70,10 @@ setopts() {
 
 	if [ ! -z "$GRID" ]; then
 		OPTS="-g $GRID $OPTS"
+	fi
+
+	if [ ! -z "$FIXLAMBDA" ]; then
+		OPTS="-d $FIXLAMBDA $OPTS"
 	fi
 
 	if [ ! -z $USEXMAT ]; then
@@ -115,7 +120,7 @@ SFILE="./settings"
 BETA=0.01
 TYPE=1 # L1L2
 
-while getopts "r:d:a:w:t:n:s:b:g:-:kxpqcuvh" OPT; do
+while getopts "r:d:a:w:t:n:s:b:g:d:-:kxpqcuvh" OPT; do
 	case "$OPT" in
 		r) TYPE=$OPTARG ;;
 		d)  WEIGHTS=$OPTARG ;;
@@ -127,6 +132,7 @@ while getopts "r:d:a:w:t:n:s:b:g:-:kxpqcuvh" OPT; do
 		s)  SFILE=$OPTARG ;;
 		b)  BETA=$OPTARG ;;
 		g)  GRID=$OPTARG ;;
+		d)  FIXLAMBDA=$OPTARG ;;
 		x)  USEXMAT=1 ;;
 		p)  warning_parallelCDA ;;
 		q)  SPLINE=1 ;;
