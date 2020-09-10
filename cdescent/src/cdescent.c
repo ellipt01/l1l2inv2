@@ -252,8 +252,12 @@ cdescent_use_fixed_lambda (cdescent *cd, const double lambda)
 void
 cdescent_use_fixed_lambda1 (cdescent *cd, const double lambda1)
 {
-	if (fabs (cd->alpha1) < DBL_EPSILON) {
-		const char	msg[] = "conflicted settings were specified: alpha1=0 and use_fixed_lambda1=true";
+	if (fabs (cd->alpha2) < DBL_EPSILON) {
+		const char	msg[] = "conflicted settings: alpha2=0 (pure L1) and use_fixed_lambda1=true";
+		printf_warning ("cdescent_use_fixed_lambda1", msg, __FILE__, __LINE__);
+	}
+	if (cd->use_fixed_lambda2) {
+		const char	msg[] = "conflicted settings: use_fixed_lambda2=true and use_fixed_lambda1=true";
 		printf_warning ("cdescent_use_fixed_lambda1", msg, __FILE__, __LINE__);
 	}
 	cd->use_fixed_lambda1 = true;
@@ -264,8 +268,12 @@ cdescent_use_fixed_lambda1 (cdescent *cd, const double lambda1)
 void
 cdescent_use_fixed_lambda2 (cdescent *cd, const double lambda2)
 {
-	if (fabs (cd->alpha2) < DBL_EPSILON) {
-		const char	msg[] = "conflicted settings were specified: alpha2=0 and use_fixed_lambda2=true";
+	if (fabs (cd->alpha1) < DBL_EPSILON) {
+		const char	msg[] = "conflicted settings were specified: alpha1=0 (pure L2) and use_fixed_lambda2=true";
+		printf_warning ("cdescent_use_fixed_lambda2", msg, __FILE__, __LINE__);
+	}
+	if (cd->use_fixed_lambda1) {
+		const char	msg[] = "conflicted settings: use_fixed_lambda1=true and use_fixed_lambda2=true";
 		printf_warning ("cdescent_use_fixed_lambda2", msg, __FILE__, __LINE__);
 	}
 	cd->use_fixed_lambda2 = true;
