@@ -52,7 +52,8 @@ fprintf_grid (FILE *stream, const double *data, char *fn_ter)
 			free (z);
 			fclose (fp);
 		}
-		// else, terrain is ignored and assume to be a flat plane
+		// else, terrain is ignored
+		// and surface of the model space is assumed to be a flat plane
 	}
 	fwrite_grid_with_data (stdout, g, data, NULL);
 	grid_free (g);
