@@ -5,8 +5,8 @@ DESTDIR		= ./bin
 DESTLIBDIR	= ./lib
 
 LOCALLIBS	= -L./lib -ll1l2inv -lcdescent -lmgcal
-LIBS		= $(BLAS_LIB) $(GSL_LIB)
-CPPFLAGS	= -I./include -I./mgcal/include -I./cdescent/include -lm $(OPENMP_FLG)
+LIBS		= $(BLAS_LIB) $(GSL_LIB) $(EXTRA_LIBS)
+CPPFLAGS	= -I./include -I./mgcal/include -I./cdescent/include $(OPENMP_FLG)
 
 LIBSRC_OBJS	= src/l1l2inv.o src/simeq.o src/smooth.o src/utils.o src/settings.o
 
@@ -85,6 +85,15 @@ clean-objs:
 			@ for i in $(OBJS) ; do \
 				$(RM) $$i ; \
 			done
+			@ for i in $(PROGRAMS) ; do \
+				$(RM) src/$$i ; \
+			done
+			@ for i in $(TOOLS) ; do \
+				$(RM) tools/$$i ; \
+			done
+			@ for i in $(DEMO) ; do \
+				$(RM) demo/src/$$i ; \
+			done
 			@ for i in $(SUBDIRS) ; do \
 				$(MAKE) clean-objs -C $$i ; \
 			done
@@ -94,15 +103,12 @@ clean-objs:
 clean:		clean-objs
 			$(RM) $(DESTLIBDIR)/libl1l2inv.a
 			@ for i in $(PROGRAMS) ; do \
-				$(RM) src/$$i ; \
 				$(RM) $(DESTDIR)/$$i ; \
 			done
 			@ for i in $(TOOLS) ; do \
-				$(RM) tools/$$i ; \
 				$(RM) $(DESTDIR)/$$i ; \
 			done
 			@ for i in $(DEMO) ; do \
-				$(RM) demo/src/$$i ; \
 				$(RM) demo/$(DESTDIR)/$$i ; \
 			done
 			@ for i in $(SUBDIRS) ; do \
