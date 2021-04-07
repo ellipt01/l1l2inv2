@@ -9,14 +9,14 @@
 #include "mgcal.h"
 #include "cdescent.h"
 
-#include "consts.h"
 #include "simeq.h"
 #include "utils.h"
 #include "l1l2inv.h"
 #include "settings.h"
 #include "defaults.h"
 
-bool	penalty_for_actual_magnetization = false;
+extern bool		stretch_grid_at_edge;
+bool			penalty_for_actual_magnetization = false;
 
 static void
 usage (char *toolname)

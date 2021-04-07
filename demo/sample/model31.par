@@ -1,6 +1,6 @@
 # Inclination, Declination
 #    Inc     Dec (degree)
-    50.0    -7.0
+    90.0    75.0
 
 # magnetized block #1
 #     X0        Y0       Z0       L       W       H(km)   Mgz

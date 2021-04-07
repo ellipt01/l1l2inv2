@@ -10,11 +10,11 @@
 #include <cdescent.h>
 #include <mgcal.h>
 
-#include "consts.h"
 #include "simeq.h"
 #include "utils.h"
 #include "settings.h"
 #include "defaults.h"
+#include "extern_consts.h"
 
 #define	TYPE_GRID	0
 #define	TYPE_ARRAY	1
@@ -161,6 +161,42 @@ create_input_data_by_array (FILE *stream, const data_array *array, const source 
 	free (a);
 
 	return;
+}
+
+/*********************************************
+ *  入力データの作成
+ *  ファイル model.par からパラメータを読み取り
+ *********************************************/
+static source *
+read_model_par (FILE *fp, const double exf_inc, const double exf_dec)
+{
+	int		i;
+	source	*s;
+	char	buf[BUFSIZ];
+
+	double	inc, dec;
+
+	s = source_new (exf_inc, exf_dec);
+	i = 0;
+	while (fgets (buf, BUFSIZ, fp) != NULL) {
+		double	x, y, z, mgz, l, w, h;
+		char	*p = buf;
+		while (p[0] == ' ' || p[0] == '\t' || p[0] == '\r' || p[0] == '\n') p++;
+		if (p[0] == '#') continue;
+		if (strlen (p) <= 1) continue;
+		if (i == 0) {
+			sscanf (p, "%lf %lf", &inc, &dec);
+			i++;
+		} else {
+			sscanf (p, "%lf %lf %lf %lf %lf %lf %lf", &x, &y, &z, &l, &w, &h, &mgz);
+			source_append_item (s);
+			source_set_position (s, x, y, z);
+			source_set_dimension (s, l, w, h);
+			source_set_magnetization (s, mgz, inc, dec);
+		}
+	}
+
+	return s;
 }
 
 int

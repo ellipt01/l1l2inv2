@@ -8,7 +8,7 @@
 
 #include "simeq_xmat.h"
 #include "smooth.h"
-#include "consts.h"
+#include "extern_consts.h"
 
 simeq *
 simeq_new (void)
@@ -40,7 +40,8 @@ create_observation (const data_array *array)
 }
 
 static void
-create_kernel_matrix_xmatfile (const double inc, const double dec,
+create_kernel_matrix_xmatfile (const double exf_inc, const double exf_dec,
+	const double mag_inc, const double mag_dec,
 	const data_array *array, const grid *gsrc, const mgcal_func *func)
 {
 	int			i, l;
@@ -51,7 +52,8 @@ create_kernel_matrix_xmatfile (const double inc, const double dec,
 	int			num_xfiles = ngrd[2];
 	int			xfile_len = ngrd[0] * ngrd[1];
 
-	vector3d	*e;
+	vector3d	*exf;
+	vector3d	*mag;
 
 	mm_real		*w = mm_real_new (MM_REAL_DENSE, MM_REAL_GENERAL, n, 1, n);
 	mm_real		*s = mm_real_new (MM_REAL_DENSE, MM_REAL_GENERAL, n, 1, n);
@@ -59,7 +61,8 @@ create_kernel_matrix_xmatfile (const double inc, const double dec,
 	bool		nextfile;
 	FILE		*fp = NULL;
 
-	e = vector3d_new_with_geodesic_poler (1., inc, dec);
+	exf = vector3d_new_with_geodesic_poler (1., exf_inc, exf_dec);
+	mag = vector3d_new_with_geodesic_poler (1., mag_inc, mag_dec);
 
 #pragma omp parallel for private (i)
 	for (l = 0; l < num_xfiles; l++) {
@@ -71,11 +74,11 @@ create_kernel_matrix_xmatfile (const double inc, const double dec,
 
 		vector3d	*obs = vector3d_new (0., 0., 0.);
 		source		*src = source_new (0., 0.);
-		src->exf = vector3d_copy (e);
+		src->exf = vector3d_copy (exf);
 		source_append_item (src);
 		src->begin->pos = vector3d_new (0., 0., 0.);
 		src->begin->dim = vector3d_new (0., 0., 0.);
-		src->begin->mgz = vector3d_copy (e);
+		src->begin->mgz = vector3d_copy (mag);
 
 		sprintf (fn, "x%03d.mat", l);
 		fp_xmat = fopen (fn, "wab");
@@ -120,13 +123,15 @@ create_kernel_matrix_xmatfile (const double inc, const double dec,
 	fclose (fp);
 	mm_real_free (w);
 
-	vector3d_free (e);
+	vector3d_free (exf);
+	vector3d_free (mag);
 
 	return;
 }
 
 simeq *
-create_simeq (const int type, const double inc, const double dec,
+create_simeq (const int type, const double exf_inc, const double exf_dec,
+	const double mag_inc, const double mag_dec,
 	const data_array *array, const grid *gsrc, const mgcal_func *func, const double *w,
 	bool create_xmat)
 {
@@ -135,7 +140,7 @@ create_simeq (const int type, const double inc, const double dec,
 
 	eq = simeq_new ();
 	if (array) eq->y = create_observation (array);
-	if (create_xmat) create_kernel_matrix_xmatfile (inc, dec, array, gsrc, func);
+	if (create_xmat) create_kernel_matrix_xmatfile (exf_inc, exf_dec, mag_inc, mag_dec, array, gsrc, func);
 
 	switch (type) {
 		case TYPE_L1L2:

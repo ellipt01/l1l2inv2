@@ -12,8 +12,8 @@
 
 #include "private/private.h"
 
-int		num_xfiles;
-int		xfile_len;
+extern int		num_xfiles;
+extern int		xfile_len;
 
 /* calculate sum x(:,j) */
 static bool

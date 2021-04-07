@@ -57,4 +57,19 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+bin
 share
+demo/sample
+
+src/l1l2inv
+src/lcurve_interp
+src/optimal_lambda
+tools/cross_sect
+tools/extract
+tools/recover
+xmat/src/l1l2inv_xmat
+xmat/tools/recover_xmat
+demo/src/makeinput
+
+make.config
+

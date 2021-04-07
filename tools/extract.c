@@ -6,13 +6,11 @@
 #include "cdescent.h"
 #include "mgcal.h"
 
-#include "consts.h"
 #include "simeq.h"
 #include "utils.h"
 #include "settings.h"
 #include "defaults.h"
-
-extern char	*optarg;
+#include "extern_consts.h"
 
 int			idx = -1;
 char		*fn = NULL;

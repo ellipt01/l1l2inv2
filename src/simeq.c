@@ -96,19 +96,23 @@ create_observation (const data_array *array)
 }
 
 static mm_dense *
-create_kernel_matrix_dense (const double inc, const double dec,
+create_kernel_matrix_dense (const double exf_inc, const double exf_dec,
+	const double mag_inc, const double mag_dec,
 	const data_array *array, const grid *gsrc, const mgcal_func *func)
 {
 	int			i;
 	int			m = array->n;
 	int			n = gsrc->n;
 	int			nnz = m * n;
-	vector3d	*e;
+	vector3d	*exf;
+	vector3d	*mag;
 	mm_dense	*a = mm_real_new (MM_REAL_DENSE, MM_REAL_GENERAL, m, n, nnz);
 
-	e = vector3d_new_with_geodesic_poler (1., inc, dec);
-	kernel_matrix_set (a->data, array, gsrc, e, e, func);
-	vector3d_free (e);
+	exf = vector3d_new_with_geodesic_poler (1., exf_inc, exf_dec);
+	mag = vector3d_new_with_geodesic_poler (1., mag_inc, mag_dec);
+	kernel_matrix_set (a->data, array, gsrc, mag, exf, func);
+	vector3d_free (exf);
+	vector3d_free (mag);
 
 	return a;
 }
@@ -121,28 +125,31 @@ hdist (const vector3d *pos0, const vector3d *pos1)
 
 // obsolete
 static mm_sparse *
-create_kernel_matrix_sparse (const double inc, const double dec,
+create_kernel_matrix_sparse (const double exf_inc, const double exf_dec,
+	const double mag_inc, const double mag_dec,
 	const data_array *array, const grid *gsrc, const mgcal_func *func, const double rthres)
 {
 	int			j;
 	int			m = array->n;
 	int			n = gsrc->n;
 	int			nnz = m * n;
-	vector3d	*e;
+	vector3d	*exf;
+	vector3d	*mag;
 	mm_dense	*a = mm_real_new (MM_REAL_SPARSE, MM_REAL_GENERAL, m, n, nnz);
 
-	e = vector3d_new_with_geodesic_poler (1., inc, dec);
+	exf = vector3d_new_with_geodesic_poler (1., exf_inc, exf_dec);
+	mag = vector3d_new_with_geodesic_poler (1., mag_inc, mag_dec);
 
 #pragma omp parallel
 	{
 		int			i, k;
 		vector3d	*obs = vector3d_new (0., 0., 0.);
 		source		*src = source_new (0., 0.);
-		src->exf = vector3d_copy (e);
+		src->exf = vector3d_copy (exf);
 		source_append_item (src);
 		src->begin->pos = vector3d_new (0., 0., 0.);
 		src->begin->dim = vector3d_new (0., 0., 0.);
-		src->begin->mgz = vector3d_copy (e);
+		src->begin->mgz = vector3d_copy (mag);
 
 		k = 0;
 #pragma omp for
@@ -167,13 +174,15 @@ create_kernel_matrix_sparse (const double inc, const double dec,
 		source_free (src);
 	}			
 
-	vector3d_free (e);
+	vector3d_free (exf);
+	vector3d_free (mag);
 
 	return a;
 }
 
 simeq *
-create_simeq (const int type, const double inc, const double dec,
+create_simeq (const int type, const double exf_inc, const double exf_dec,
+	const double mag_inc, const double mag_dec,
 	const data_array *array, const grid *gsrc, const mgcal_func *func, const double *w)
 {
 	simeq	*eq;
@@ -182,7 +191,7 @@ create_simeq (const int type, const double inc, const double dec,
 	eq = simeq_new ();
 	if (array) eq->y = create_observation (array);
 
-	eq->x = create_kernel_matrix_dense (inc, dec, array, gsrc, func);
+	eq->x = create_kernel_matrix_dense (exf_inc, exf_dec, mag_inc, mag_dec, array, gsrc, func);
 
 	switch (type) {
 		case TYPE_L1L2:

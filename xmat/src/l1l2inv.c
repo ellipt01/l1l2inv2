@@ -9,11 +9,11 @@
 #include "mgcal.h"
 #include "cdescent.h"
 
-#include "consts.h"
 #include "simeq_xmat.h"
 #include "utils_xmat.h"
 #include "settings.h"
 #include "extern.h"
+#include "extern_consts.h"
 
 extern bool	create_xmat;
 int			num_xfiles;

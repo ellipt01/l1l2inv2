@@ -8,11 +8,11 @@
 #include "cdescent.h"
 #include "mgcal.h"
 
-#include "consts.h"
 #include "simeq.h"
 #include "utils.h"
 #include "settings.h"
 #include "defaults.h"
+#include "extern_consts.h"
 
 char		fn[80];
 bool		terrain_file_specified = false;

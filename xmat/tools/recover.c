@@ -7,11 +7,11 @@
 #include "cdescent.h"
 #include "mgcal.h"
 
-#include "consts.h"
 #include "simeq_xmat.h"
 #include "utils_xmat.h"
 #include "settings.h"
 #include "defaults.h"
+#include "extern_consts.h"
 
 static int	iter = -1;
 static bool	beta_file_specified = false;

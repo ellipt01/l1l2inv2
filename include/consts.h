@@ -18,5 +18,9 @@ bool	stretch_grid_at_edge;
 bool	use_dz_array;
 double	*dz;
 
+/* declination and inclination of rock magnetization */
+double	mag_dec;
+double	mag_inc;
+
 #endif /* _const_H_ */
 

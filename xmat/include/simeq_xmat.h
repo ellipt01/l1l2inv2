@@ -21,7 +21,8 @@ void	simeq_centering_x (simeq *eq);
 void	simeq_normalizing_x (simeq *eq);
 void	simeq_standardizing_x (simeq *eq);
 simeq	*create_simeq (
-			const int type, const double inc, const double dec,
+			const int type, const double exf_inc, const double exf_dec,
+			const double mag_inc, const double mag_dec,
 			const data_array *array, const grid *gsrc, const mgcal_func *func,
 			const double *w, bool create_xmat
 		);

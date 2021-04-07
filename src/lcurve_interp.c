@@ -15,7 +15,6 @@
 #include "mgcal.h"
 #include "cdescent.h"
 
-#include "consts.h"
 #include "simeq.h"
 #include "utils.h"
 #include "settings.h"

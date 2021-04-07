@@ -8,14 +8,8 @@
 #include "simeq_xmat.h"
 #include "utils_xmat.h"
 #include "_version_.h"
+#include "extern_consts.h"
 
-extern const double	exf_dec;
-extern const double	exf_inc;
-
-extern const int	ngrd[];
-extern const double	xgrd[];
-extern const double	ygrd[];
-extern const double	zgrd[];
 extern bool			stretch_grid_at_edge;
 extern const bool	use_dz_array;
 extern double		dz[];
@@ -165,49 +159,13 @@ read_input (const int type, const char *ifn, const char *tfn, const double *w, b
 
 	f = total_force_prism;
 	func = mgcal_func_new (f, NULL);
-	eq = create_simeq (type, exf_inc, exf_dec, array, g, func, w, create_xmat);
+	eq = create_simeq (type, exf_inc, exf_dec, mag_inc, mag_dec, array, g, func, w, create_xmat);
 
 	grid_free (g);
 	data_array_free (array);
 	mgcal_func_free (func);
 
 	return eq;
-}
-
-/*********************************************
- *  入力データの作成
- *  ファイル model.par からパラメータを読み取り
- *********************************************/
-source *
-read_model_par (FILE *fp, const double exf_inc, const double exf_dec)
-{
-	int		i;
-	source	*s;
-	char	buf[BUFSIZ];
-
-	double	inc, dec;
-
-	s = source_new (exf_inc, exf_dec);
-	i = 0;
-	while (fgets (buf, BUFSIZ, fp) != NULL) {
-		double	x, y, z, mgz, l, w, h;
-		char	*p = buf;
-		while (p[0] == ' ' || p[0] == '\t' || p[0] == '\r' || p[0] == '\n') p++;
-		if (p[0] == '#') continue;
-		if (strlen (p) <= 1) continue;
-		if (i == 0) {
-			sscanf (p, "%lf %lf", &inc, &dec);
-			i++;
-		} else {
-			sscanf (p, "%lf %lf %lf %lf %lf %lf %lf", &x, &y, &z, &l, &w, &h, &mgz);
-			source_append_item (s);
-			source_set_position (s, x, y, z);
-			source_set_dimension (s, l, w, h);
-			source_set_magnetization (s, mgz, inc, dec);
-		}
-	}
-
-	return s;
 }
 
 void

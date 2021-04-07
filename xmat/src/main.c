@@ -9,12 +9,13 @@
 #include "mgcal.h"
 #include "cdescent.h"
 
-#include "consts.h"
 #include "simeq_xmat.h"
 #include "utils_xmat.h"
 #include "l1l2inv_xmat.h"
 #include "settings.h"
 #include "defaults.h"
+
+extern bool stretch_grid_at_edge;
 
 bool	create_xmat = true;
 bool	penalty_for_actual_magnetization = false;

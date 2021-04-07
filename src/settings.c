@@ -57,6 +57,8 @@ read_settings (char *fn)
 	char	buf[BUFSIZ];
 	FILE	*fp;
 
+	bool	mag_inc_dec_specified = false;
+
 	if (!fn) {
 		fprintf (stderr, "ERROR: parameter setting file ./settings is not exists.");
 		return false;
@@ -92,11 +94,20 @@ read_settings (char *fn)
 			case '5':
 				sscanf (p, "%lf,%lf", &zgrd[0], &zgrd[1]);
 				break;
+			case '6':
+				sscanf (p, "%lf,%lf", &mag_inc, &mag_dec);
+				mag_inc_dec_specified = true;
+				break;
 			default:
 				break;
 		}
 	}
 	fclose (fp);
+
+	if (!mag_inc_dec_specified) {
+		mag_inc = exf_inc;
+		mag_dec = exf_dec;
+	}
 
 	if (!check_num (ngrd)) {
 		fprintf (stderr, "ERROR: specified ngrd is invalid.\n");
