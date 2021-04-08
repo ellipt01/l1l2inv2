@@ -6,7 +6,7 @@ DESTLIBDIR	= ./lib
 
 LOCALLIBS	= -L./lib -ll1l2inv -lcdescent -lmgcal
 LIBS		= $(BLAS_LIB) $(GSL_LIB) $(EXTRA_LIBS)
-CPPFLAGS	= -I./include -I./mgcal/include -I./cdescent/include # $(OPENMP_FLG)
+CPPFLAGS	= -I./include -I./mgcal/include -I./cdescent/include $(OPENMP_FLG)
 
 LIBSRC_OBJS	= src/l1l2inv.o src/simeq.o src/smooth.o src/utils.o src/settings.o
 
@@ -64,7 +64,7 @@ $(SUBDIRS):	FORCE
 FORCE:
 
 .c.o:
-			$(CC) $(CFLAGS) -o $*.o -c $(CPPFLAGS) $< $(OPENMP_FLG)
+			$(CC) $(CFLAGS) -o $*.o -c $(CPPFLAGS) $< 
 
 install:
 			@ for i in $(PROGRAMS) ; do \

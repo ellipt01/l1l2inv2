@@ -180,14 +180,15 @@ is_valid_line (char *p)
 	return true;
 }
 
+static char	stream_buf[BUFSIZ];
+
 static char *
 get_valid_line_body (FILE *stream)
 {
-	char	buf[BUFSIZ];
 	char	*p = NULL;
 	while (1) {
-		if (fgets (buf, BUFSIZ, stream) == NULL) return NULL;
-		p = skip_blanks (buf);
+		if (fgets (stream_buf, BUFSIZ, stream) == NULL) return NULL;
+		p = skip_blanks (stream_buf);
 		if (!is_valid_line (p)) continue;
 		break;
 	}
