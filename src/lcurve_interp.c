@@ -24,6 +24,8 @@ static char		fn[80];
 static double	alpha = 1.0;
 static double	beta_val = 1.e-1;
 
+#include "consts_dummy.h"
+
 void
 fprintf_curvature (FILE *stream, const gsl_vector *l, const gsl_vector *cv, const gsl_vector *y)
 {

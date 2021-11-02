@@ -14,6 +14,8 @@
 #include "utils.h"
 #include "settings.h"
 
+#include "consts_dummy.h"
+
 char	ifn[80];
 char	ofn[80] = "curvature_spl.data";
 double	dt = 0.01;
