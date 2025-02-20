@@ -1,8 +1,6 @@
 
 include ../make.config
 
-OPENMP_FLG	= -fopenmp
-
 DESTLIBDIR	= ../lib
 LIBS		= -lm $(OPENMP_FLG)
 CPPFLAGS	= -I./include
